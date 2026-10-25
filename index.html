@@ -231,6 +231,8 @@ ol,ul{margin:6px 0 0;padding-left:20px} li{margin:3px 0}
 
 .pickbtn{display:inline-flex;align-items:center;font-weight:600;border-radius:8px;padding:10px 14px;border:1px solid var(--line);background:var(--soft);color:var(--fg);cursor:pointer}
 .pickbtn.small{padding:6px 10px;font-size:.8rem;align-self:flex-start}
+.alts{display:flex;flex-direction:column;gap:6px}
+.altshd{font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);padding-top:2px}
 /* bottom tab bar */
 nav.tabs{position:fixed;left:0;right:0;bottom:0;z-index:20;background:var(--card);border-top:1px solid var(--line);
   padding:6px max(8px,env(safe-area-inset-right,0px)) calc(6px + env(safe-area-inset-bottom,0px)) max(8px,env(safe-area-inset-left,0px))}
@@ -931,22 +933,44 @@ nav.tabs button[aria-selected="true"]{color:var(--hot);background:var(--soft)}
   $("wNext").onclick=()=>{ const d=addDays(woDate,1); setWoDate(d); fill(d); };
 
   // ---------- coach demos, alternatives, weight ranges
-  const LINKS = {"Seated Leg Press":["https://static.wixstatic.com/ugd/d6c342_b689b3ef348e4d27b4efa89ee6acbd41.pdf","https://youtu.be/bkkbKXkCcFc"],"Swiss Ball Dumbbell SQUATS":["https://static.wixstatic.com/ugd/d6c342_9068a0d2a97f44e59d2bcbcae5631f01.pdf","https://youtu.be/GoHKepp24P0"],"Isolated Seated Leg Press (Quads)":["https://static.wixstatic.com/ugd/d6c342_feed3a57a22443ff9e41d236f5c3b87f.pdf","https://youtu.be/Ksx6gL2D0hc"],"Bench Bodyweight Step-Ups":["https://static.wixstatic.com/ugd/d6c342_a133b084306f4a6193b7578f4c44885a.pdf","https://youtu.be/ylihQrKrSao"],"Machine Chest Press":["https://static.wixstatic.com/ugd/d6c342_1ae7dd6478f0459a8d7fd81ff0d1c2f2.pdf","https://youtu.be/SQrJ-galt0k"],"Flat Bench Dumbbell Press":["https://static.wixstatic.com/ugd/d6c342_0cfc11b2a79546ef9985e6fcf4290fb9.pdf","https://youtu.be/oWy0EAqciNQ"],"Incline Bench Dumbbell Press":["https://static.wixstatic.com/ugd/d6c342_37ddfb23b74f407d9410f9be67ba0208.pdf","https://youtu.be/mdiBE680zx4"],"Machine Incline Chest Press":["https://static.wixstatic.com/ugd/d6c342_bc47e4c3a43f4cb0b2e08c9071e3dc98.pdf","https://youtu.be/g2CmLy0msmI"],"Lat PullDowns (Wide Grip)":["https://static.wixstatic.com/ugd/d6c342_987caffc0d914af7b14fe7cc8a806447.pdf","https://youtu.be/rqHqxq4C9dw"],"Lat PullDowns (V Bar)":["https://static.wixstatic.com/ugd/d6c342_a2c5846b013b4d23aa30a2f74138d5fe.pdf","https://youtu.be/3CbNQQEFs4I"],"Lat PullDowns (Underhand Grip)":["https://static.wixstatic.com/ugd/d6c342_2a71a0ba228c4dcea0733112a7cc7b8a.pdf","https://youtu.be/C73rgo3ua_Y"],"Seated Cable Rows (V Bar)":["https://static.wixstatic.com/ugd/d6c342_e8ea00eda4424b68b1e24d1881e90f66.pdf","https://youtu.be/zdj8G0nXcEY"],"Seated Cable Rows (Underhand Grip)":["https://static.wixstatic.com/ugd/d6c342_ac02fbc11e3748b7aefdd0ac9c3e3982.pdf","https://youtu.be/0a0VZ6lAR6g"],"Seated Cable Rows (Single Arm Grip)":["https://static.wixstatic.com/ugd/d6c342_650ef1b6829c43aca0aa133cf44d51df.pdf","https://youtu.be/opKUJsmLRwY"],"Bent Over Single Arm Dumbbell Rows":["https://static.wixstatic.com/ugd/d6c342_4e40a600d2a94c69820ce958242686b4.pdf","https://youtu.be/qlxlbyUcJHg"],"Swiss Ball Wall SQUATS":["https://static.wixstatic.com/ugd/d6c342_5562a9235701466b9e65ffb388ad923d.pdf","https://youtu.be/iugVWhyDGOw"],"SUMO Squats":["https://static.wixstatic.com/ugd/d6c342_1dba68c3b51c4de5999e8dcf02d926a7.pdf","https://youtu.be/AoHuCTRlfk4"],"Machine Shoulder Press (Wide Grip)":["https://static.wixstatic.com/ugd/d6c342_d1fa40b7d23340c6bc4c5bdf59f63c01.pdf","https://youtu.be/TIAjZC2VkQY"],"Seated Overhead Dumbbell Press":["https://static.wixstatic.com/ugd/d6c342_c5c8a4a77e894ab282b46eddd7c5642c.pdf","https://youtu.be/96QQQ3h4PyQ"],"Machine Shoulder Press (Close Grip)":["https://static.wixstatic.com/ugd/d6c342_a6c837ac10e843a99148be0a3e6e0493.pdf","https://youtu.be/c8TKl7pCqMQ"],"Seated Arnold Press":["https://static.wixstatic.com/ugd/d6c342_4dbe1a7e901c478fadb8fb1bcccb8577.pdf","https://youtu.be/DRPX5fEdIBI"],"Four Point Balance":["https://static.wixstatic.com/ugd/d6c342_d6f4bcc4b199410480369b1e93108963.pdf","https://youtu.be/cDe6aewJdVY"],"Plank":["https://static.wixstatic.com/ugd/d6c342_a58d26d7b97649a0b67228991b7babd2.pdf","https://youtu.be/tY9e_cZ2f08"],"Dumbbell Stiff Leg Dead-Lifts":["https://static.wixstatic.com/ugd/d6c342_39387d2979124ec8999944f8d4c68027.pdf","https://youtu.be/C3QKELKRBkY"],"Isolated DB Stiff Leg Dead-Lifts":["https://static.wixstatic.com/ugd/d6c342_795cb58231e046528fc5f5c4f61321a0.pdf","https://youtu.be/al3CpCgIrN8"],"Seated Leg Curls":["https://static.wixstatic.com/ugd/d6c342_0f30ecbf66fb49f8a7e5d31d22b65e92.pdf","https://youtu.be/Dy0cCD9YrEQ"],"Lying Leg Curls":["https://static.wixstatic.com/ugd/d6c342_ae56c73c59e5449496a15f3b9127693d.pdf","https://youtu.be/wmx_U4q0dXs"],"Rear Delts Band Flys":["https://static.wixstatic.com/ugd/d6c342_d532931b4c2c4b8ca3bd699fb961592f.pdf","https://youtu.be/1lA4iaJBrIU"],"Standing Side Dumbbell Shrugs":["https://static.wixstatic.com/ugd/d6c342_1480c63d82314ba7a27c29be2c582e57.pdf","https://youtu.be/c3llTuB0u1M"],"Straight Bar Cable Shrugs":["https://static.wixstatic.com/ugd/d6c342_e86d0642c83a492d8d8786d10e5c88a0.pdf","https://youtu.be/Y4XgjczBHk0"],"Floor Abdominal Crunches":["https://static.wixstatic.com/ugd/d6c342_87c5419fca9b4f81bcc11f6164684278.pdf","https://youtu.be/1m4ar2vX_mg"],"Bench Crunches":["https://static.wixstatic.com/ugd/d6c342_564f731e8c6f439d9cf0cf0a970a7a35.pdf","https://youtu.be/4jK_JUZaems"],"Bench Knee Raises":["https://static.wixstatic.com/ugd/d6c342_966d771cf6ee43acacf2063cdc87b36d.pdf","https://youtu.be/3A0YHX5Sc7A"],"Lying Knee Raises":["https://static.wixstatic.com/ugd/d6c342_953e1220581e420193ef9a800fa398d0.pdf","https://youtu.be/OjnF0_fZaIc"],"Horizontal Cable Woodchoppers":["https://static.wixstatic.com/ugd/d6c342_2e44459681b44cfeadfb42a82bffe3dd.pdf","https://youtu.be/dOaYm7c85uA"],"Band Woodchoppers":["https://www.youtube.com/watch?v=87zQtBpS0ME","https://www.youtube.com/watch?v=87zQtBpS0ME"],"Standing Dumbbell Curls":["https://static.wixstatic.com/ugd/d6c342_bf45784480ee4389b95c4948830b5aa9.pdf","https://youtu.be/wi-A8ADdlrU"],"Straight Bar Cable Curls":["https://static.wixstatic.com/ugd/d6c342_6933bc00b38249fcaa9887b03ca30839.pdf","https://youtu.be/4ka-KifIK_k"],"Straight Bar Cable PushDowns":["https://static.wixstatic.com/ugd/d6c342_415954ae9cc54c718c757eaee6bf7b32.pdf","https://youtu.be/dt-UyeLL4m4"],"Rope Cable Extensions":["https://static.wixstatic.com/ugd/d6c342_9dfdbaef15c04a4db56f8100845f42a5.pdf","https://youtu.be/rq90X1D21us"],"Weighted SUMO Squats":["https://static.wixstatic.com/ugd/d6c342_c1b6a75cb5514279886650eb101768f5.pdf","https://youtu.be/mbIzIkONvvU"],"Bodyweight Reverse Lunges":["https://static.wixstatic.com/ugd/d6c342_10431408f8eb4a888bd67478f730ced2.pdf","https://youtu.be/sU8H048_Bhc"],"Standing Calf Raises":["https://static.wixstatic.com/ugd/d6c342_9c70a1f467444ebcb84eccd28e64025a.pdf","https://youtu.be/cfEKJwS1FMY"],"Seated Leg Press Calf Extension":["https://static.wixstatic.com/ugd/d6c342_7ed231f5af384d04996caaa0928db60f.pdf","https://youtu.be/R1B6eQPF35I"],"Standing Hammer Curls":["https://static.wixstatic.com/ugd/d6c342_8e21525523a24a33bddf4f518f8d7c22.pdf","https://youtu.be/2FrjGBs4ZWo"],"Seated Hammer Curls":["https://static.wixstatic.com/ugd/d6c342_852de1408191411a86b3c17e6999e3ed.pdf","https://youtu.be/7TGrEBxmJZo"],"Leg Extensions":["https://static.wixstatic.com/ugd/d6c342_c7523f38be53438d8d29cdffbaf08824.pdf","https://youtu.be/MaKHAaVfzcA"],"Isolated Leg Extensions":["https://static.wixstatic.com/ugd/d6c342_fbca8a5540db45399d0e0b8ceded4033.pdf","https://youtu.be/dXDrL_xbpJM"],"Mountain Climbers":["https://static.wixstatic.com/ugd/d6c342_278b926e481946729e20d256e590f60d.pdf","https://youtu.be/xeKOJ3ysYLg"]};
+  const LINKS = {"Seated Leg Press":["https://static.wixstatic.com/ugd/d6c342_b689b3ef348e4d27b4efa89ee6acbd41.pdf","https://youtu.be/bkkbKXkCcFc"],"Swiss Ball Dumbbell SQUATS":["https://static.wixstatic.com/ugd/d6c342_9068a0d2a97f44e59d2bcbcae5631f01.pdf","https://youtu.be/GoHKepp24P0"],"Isolated Seated Leg Press (Quads)":["https://static.wixstatic.com/ugd/d6c342_feed3a57a22443ff9e41d236f5c3b87f.pdf","https://youtu.be/Ksx6gL2D0hc"],"Bench Bodyweight Step-Ups":["https://static.wixstatic.com/ugd/d6c342_a133b084306f4a6193b7578f4c44885a.pdf","https://youtu.be/ylihQrKrSao"],"Machine Chest Press":["https://static.wixstatic.com/ugd/d6c342_1ae7dd6478f0459a8d7fd81ff0d1c2f2.pdf","https://youtu.be/SQrJ-galt0k"],"Flat Bench Dumbbell Press":["https://static.wixstatic.com/ugd/d6c342_0cfc11b2a79546ef9985e6fcf4290fb9.pdf","https://youtu.be/oWy0EAqciNQ"],"Incline Bench Dumbbell Press":["https://static.wixstatic.com/ugd/d6c342_37ddfb23b74f407d9410f9be67ba0208.pdf","https://youtu.be/mdiBE680zx4"],"Machine Incline Chest Press":["https://static.wixstatic.com/ugd/d6c342_bc47e4c3a43f4cb0b2e08c9071e3dc98.pdf","https://youtu.be/g2CmLy0msmI"],"Lat PullDowns (Wide Grip)":["https://static.wixstatic.com/ugd/d6c342_987caffc0d914af7b14fe7cc8a806447.pdf","https://youtu.be/rqHqxq4C9dw"],"Lat PullDowns (V Bar)":["https://static.wixstatic.com/ugd/d6c342_a2c5846b013b4d23aa30a2f74138d5fe.pdf","https://youtu.be/3CbNQQEFs4I"],"Lat PullDowns (Underhand Grip)":["https://static.wixstatic.com/ugd/d6c342_2a71a0ba228c4dcea0733112a7cc7b8a.pdf","https://youtu.be/C73rgo3ua_Y"],"Seated Cable Rows (V Bar)":["https://static.wixstatic.com/ugd/d6c342_e8ea00eda4424b68b1e24d1881e90f66.pdf","https://youtu.be/zdj8G0nXcEY"],"Seated Cable Rows (Underhand Grip)":["https://static.wixstatic.com/ugd/d6c342_ac02fbc11e3748b7aefdd0ac9c3e3982.pdf","https://youtu.be/0a0VZ6lAR6g"],"Seated Cable Rows (Single Arm Grip)":["https://static.wixstatic.com/ugd/d6c342_650ef1b6829c43aca0aa133cf44d51df.pdf","https://youtu.be/opKUJsmLRwY"],"Bent Over Single Arm Dumbbell Rows":["https://static.wixstatic.com/ugd/d6c342_4e40a600d2a94c69820ce958242686b4.pdf","https://youtu.be/qlxlbyUcJHg"],"Swiss Ball Wall SQUATS":["https://static.wixstatic.com/ugd/d6c342_5562a9235701466b9e65ffb388ad923d.pdf","https://youtu.be/iugVWhyDGOw"],"SUMO Squats":["https://static.wixstatic.com/ugd/d6c342_1dba68c3b51c4de5999e8dcf02d926a7.pdf","https://youtu.be/AoHuCTRlfk4"],"Machine Shoulder Press (Wide Grip)":["https://static.wixstatic.com/ugd/d6c342_d1fa40b7d23340c6bc4c5bdf59f63c01.pdf","https://youtu.be/TIAjZC2VkQY"],"Seated Overhead Dumbbell Press":["https://static.wixstatic.com/ugd/d6c342_c5c8a4a77e894ab282b46eddd7c5642c.pdf","https://youtu.be/96QQQ3h4PyQ"],"Machine Shoulder Press (Close Grip)":["https://static.wixstatic.com/ugd/d6c342_a6c837ac10e843a99148be0a3e6e0493.pdf","https://youtu.be/c8TKl7pCqMQ"],"Seated Arnold Press":["https://static.wixstatic.com/ugd/d6c342_4dbe1a7e901c478fadb8fb1bcccb8577.pdf","https://youtu.be/DRPX5fEdIBI"],"Four Point Balance":["https://static.wixstatic.com/ugd/d6c342_d6f4bcc4b199410480369b1e93108963.pdf","https://youtu.be/cDe6aewJdVY"],"Plank":["https://static.wixstatic.com/ugd/d6c342_a58d26d7b97649a0b67228991b7babd2.pdf","https://youtu.be/tY9e_cZ2f08"],"Dumbbell Stiff Leg Dead-Lifts":["https://static.wixstatic.com/ugd/d6c342_39387d2979124ec8999944f8d4c68027.pdf","https://youtu.be/C3QKELKRBkY"],"Isolated DB Stiff Leg Dead-Lifts":["https://static.wixstatic.com/ugd/d6c342_795cb58231e046528fc5f5c4f61321a0.pdf","https://youtu.be/al3CpCgIrN8"],"Seated Leg Curls":["https://static.wixstatic.com/ugd/d6c342_0f30ecbf66fb49f8a7e5d31d22b65e92.pdf","https://youtu.be/Dy0cCD9YrEQ"],"Lying Leg Curls":["https://static.wixstatic.com/ugd/d6c342_ae56c73c59e5449496a15f3b9127693d.pdf","https://youtu.be/wmx_U4q0dXs"],"Rear Delts Band Flys":["https://static.wixstatic.com/ugd/d6c342_d532931b4c2c4b8ca3bd699fb961592f.pdf","https://youtu.be/1lA4iaJBrIU"],"Standing Side Dumbbell Shrugs":["https://static.wixstatic.com/ugd/d6c342_1480c63d82314ba7a27c29be2c582e57.pdf","https://youtu.be/c3llTuB0u1M"],"Straight Bar Cable Shrugs":["https://static.wixstatic.com/ugd/d6c342_e86d0642c83a492d8d8786d10e5c88a0.pdf","https://youtu.be/Y4XgjczBHk0"],"Floor Abdominal Crunches":["https://static.wixstatic.com/ugd/d6c342_87c5419fca9b4f81bcc11f6164684278.pdf","https://youtu.be/1m4ar2vX_mg"],"Bench Crunches":["https://static.wixstatic.com/ugd/d6c342_564f731e8c6f439d9cf0cf0a970a7a35.pdf","https://youtu.be/4jK_JUZaems"],"Bench Knee Raises":["https://static.wixstatic.com/ugd/d6c342_966d771cf6ee43acacf2063cdc87b36d.pdf","https://youtu.be/3A0YHX5Sc7A"],"Lying Knee Raises":["https://static.wixstatic.com/ugd/d6c342_953e1220581e420193ef9a800fa398d0.pdf","https://youtu.be/OjnF0_fZaIc"],"Horizontal Cable Woodchoppers":["https://static.wixstatic.com/ugd/d6c342_2e44459681b44cfeadfb42a82bffe3dd.pdf","https://youtu.be/dOaYm7c85uA"],"Band Woodchoppers":["https://www.youtube.com/watch?v=87zQtBpS0ME","https://www.youtube.com/watch?v=87zQtBpS0ME"],"Standing Dumbbell Curls":["https://static.wixstatic.com/ugd/d6c342_bf45784480ee4389b95c4948830b5aa9.pdf","https://youtu.be/wi-A8ADdlrU"],"Straight Bar Cable Curls":["https://static.wixstatic.com/ugd/d6c342_6933bc00b38249fcaa9887b03ca30839.pdf","https://youtu.be/4ka-KifIK_k"],"Straight Bar Cable PushDowns":["https://static.wixstatic.com/ugd/d6c342_415954ae9cc54c718c757eaee6bf7b32.pdf","https://youtu.be/dt-UyeLL4m4"],"Rope Cable Extensions":["https://static.wixstatic.com/ugd/d6c342_9dfdbaef15c04a4db56f8100845f42a5.pdf","https://youtu.be/rq90X1D21us"],"Weighted SUMO Squats":["https://static.wixstatic.com/ugd/d6c342_c1b6a75cb5514279886650eb101768f5.pdf","https://youtu.be/mbIzIkONvvU"],"Bodyweight Reverse Lunges":["https://static.wixstatic.com/ugd/d6c342_10431408f8eb4a888bd67478f730ced2.pdf","https://youtu.be/sU8H048_Bhc"],"Standing Calf Raises":["https://static.wixstatic.com/ugd/d6c342_9c70a1f467444ebcb84eccd28e64025a.pdf","https://youtu.be/cfEKJwS1FMY"],"Seated Leg Press Calf Extension":["https://static.wixstatic.com/ugd/d6c342_7ed231f5af384d04996caaa0928db60f.pdf","https://youtu.be/R1B6eQPF35I"],"Standing Hammer Curls":["https://static.wixstatic.com/ugd/d6c342_8e21525523a24a33bddf4f518f8d7c22.pdf","https://youtu.be/2FrjGBs4ZWo"],"Seated Hammer Curls":["https://static.wixstatic.com/ugd/d6c342_852de1408191411a86b3c17e6999e3ed.pdf","https://youtu.be/7TGrEBxmJZo"],"Leg Extensions":["https://static.wixstatic.com/ugd/d6c342_c7523f38be53438d8d29cdffbaf08824.pdf","https://youtu.be/MaKHAaVfzcA"],"Isolated Leg Extensions":["https://static.wixstatic.com/ugd/d6c342_fbca8a5540db45399d0e0b8ceded4033.pdf","https://youtu.be/dXDrL_xbpJM"],"Mountain Climbers":["https://static.wixstatic.com/ugd/d6c342_278b926e481946729e20d256e590f60d.pdf","https://youtu.be/xeKOJ3ysYLg"],"Band Upwards Chest Flys":["https://static.wixstatic.com/ugd/d6c342_e806ed0c005749ef8d1f5be4674ddf18.pdf","https://youtu.be/bCCLgcBYg-A"],"Bar Cable PullOvers":["https://static.wixstatic.com/ugd/d6c342_6ce457f0b7734a3cab23ac0ae15be65c.pdf","https://youtu.be/gNn794vpggM"],"Bench Leg Lifts":["https://static.wixstatic.com/ugd/d6c342_892db5e9d88b41f9afe54138f5de0355.pdf","https://youtu.be/-cWolsIDMYo"],"Bent Knees Assisted Push-Ups":["https://static.wixstatic.com/ugd/d6c342_94ee8440b4a648b2acec3087063c537b.pdf","https://youtu.be/Z3s_W-N6b7Y"],"Bent Knees Bench Dips":["https://static.wixstatic.com/ugd/d6c342_5f4ecd27865340c287cfa8ff42a0a966.pdf","https://youtu.be/UN2hbytOez8"],"Decline Cable Woodchoppers":["https://static.wixstatic.com/ugd/d6c342_b8d50067cde141de852b872e72dbaa71.pdf","https://youtu.be/9mlEPLED6xQ"],"EZ Barbell Curls (Wide Grip)":["https://static.wixstatic.com/ugd/d6c342_73375e19c54a4f4684ddf85e061ded6b.pdf","https://youtu.be/ZWwXP1bIafk"],"EZ Cable Push Downs (Wide Grip)":["https://static.wixstatic.com/ugd/d6c342_d6040266e3434de4a914b39cb674d1fa.pdf","https://youtu.be/2gy4cZ0KIyc"],"Flat Bench Dumbbell Press (NG)":["https://static.wixstatic.com/ugd/d6c342_1413c1ea5e5c48fcbdc1f86f69c7b5f5.pdf","https://youtu.be/ihSK6pH2HXE"],"Flat Bench Press":["https://static.wixstatic.com/ugd/d6c342_411f50f32381412ebdd2fb31131f6730.pdf","https://youtu.be/Snyybvh8dqA"],"Floor Abs Crunches (Legs Crossed)":["https://static.wixstatic.com/ugd/d6c342_56024bda03cd494388a328351d72be42.pdf","https://youtu.be/GYbzhTer4Pw"],"Half Kneel - Single Arm Cable Pulls":["https://static.wixstatic.com/ugd/d6c342_e46e2af1aa03456aab3160a778aa30b2.pdf","https://youtu.be/NNFu86Q4s6E"],"Isolated Seated Leg Curls":["https://static.wixstatic.com/ugd/d6c342_ba81b9e672104d3fa204ae26d60fca54.pdf","https://youtu.be/p3BAxoLeLW8"],"Kneeling Cable Crunches":["https://static.wixstatic.com/ugd/d6c342_53996e75932841ab8b7a34e0cd59788d.pdf","https://youtu.be/27Osn3QklNI"],"Machine Chest Flys":["https://static.wixstatic.com/ugd/d6c342_028e4a4641354504b72c24f01e839883.pdf","https://youtu.be/NG1KKbLTVWg"],"Plate Reverse Lunges":["https://static.wixstatic.com/ugd/d6c342_3161359a440746b1b7bc15a3407fb582.pdf","https://youtu.be/1lIrioFUO-I"],"Plate Woodchoppers":["https://static.wixstatic.com/ugd/d6c342_4ac381e3fb8044c58c29e2212afa8fd0.pdf","https://youtu.be/R8XfdYaOczI"],"Rope Cable Curls":["https://static.wixstatic.com/ugd/d6c342_b7fcaf6cb39c46b78e4fabc4c69cbbec.pdf","https://youtu.be/CMUtZ10mtkY"],"Seated Leg Press (Quads)":["https://static.wixstatic.com/ugd/d6c342_74047dc998374e438b785e9020cd324d.pdf","https://youtu.be/aHp8VbAigNY"],"Seated Military Press":["https://static.wixstatic.com/ugd/d6c342_bd50e8db9a914c2f998e38cdcc5ca3e9.pdf","https://youtu.be/9x4URkWsJ3s"],"Single Arm Machine Shoulder Press (CG)":["https://static.wixstatic.com/ugd/d6c342_37fa345c994f466390b18ff040d125a0.pdf","https://youtu.be/6rtswZlkxwE"],"Standing Alternate Dumbbell Curls":["https://static.wixstatic.com/ugd/d6c342_2b58b932208b4c9aab370f7b06dc2a43.pdf","https://youtu.be/CNXN4e3qivQ"],"Standing Alternate Hammer Curls":["https://static.wixstatic.com/ugd/d6c342_77f6f2473b30457d954347bacd0f489a.pdf","https://youtu.be/WdcSUCM53zw"],"Standing Front Dumbbell Shrugs":["https://static.wixstatic.com/ugd/d6c342_2d65334f79f54277b63f4f56e60592a6.pdf","https://youtu.be/je12c-KmCM4"],"Standing Overhead Dumbbell Press":["https://static.wixstatic.com/ugd/d6c342_3dfce1528f7d4fa4940b3fce34f0a6f5.pdf","https://youtu.be/wb5OZOjeo0o"],"Swiss Ball Plate SQUATS":["https://static.wixstatic.com/ugd/d6c342_e7f9db3ca91b46549b4aaf3ac120078a.pdf","https://youtu.be/ucmK5R2x0Z8"]};
   const SL_HIP = "https://www.strengthlog.com/hip-thrust-machine/";
   const linkFor = name => LINKS[name] || (name==="Hip Thrust" ? [SL_HIP, SL_HIP] : null);
   // main id -> alternative (coach library name)
-  const ALT = {
-    leg_press:"Swiss Ball Dumbbell SQUATS", leg_press_single:"Bench Bodyweight Step-Ups", chest_press:"Flat Bench Dumbbell Press",
-    flat_db_press:"Machine Chest Press", incline_chest_press:"Machine Incline Chest Press", lat_pulldown:"Lat PullDowns (V Bar)",
-    lat_pulldown_under:"Lat PullDowns (V Bar)", seated_row_vbar:"Seated Cable Rows (Underhand Grip)", seated_row_single:"Bent Over Single Arm Dumbbell Rows",
-    wall_squat:"SUMO Squats", shoulder_press:"Seated Overhead Dumbbell Press", shoulder_press_close:"Seated Arnold Press",
-    db_overhead_press:"Machine Shoulder Press (Wide Grip)", four_point:"Plank", db_romanian_deadlift:"Isolated DB Stiff Leg Dead-Lifts",
-    leg_curl:"Lying Leg Curls", lying_leg_curl:"Seated Leg Curls", rear_delt_band:"Bent Over Single Arm Dumbbell Rows",
-    db_shrug:"Straight Bar Cable Shrugs", crunch:"Bench Crunches", knee_raise:"Lying Knee Raises", woodchop:"Band Woodchoppers",
-    plank:"Four Point Balance", db_curl:"Straight Bar Cable Curls", pushdown:"Rope Cable Extensions", db_squat_ball:"Weighted SUMO Squats",
-    step_up:"Bodyweight Reverse Lunges", calf_raise:"Seated Leg Press Calf Extension", db_row:"Seated Cable Rows (Single Arm Grip)",
-    hammer_curl:"Seated Hammer Curls", hip_thrust:"Weighted SUMO Squats", reverse_lunge:"Bench Bodyweight Step-Ups", leg_ext:"Isolated Leg Extensions"
-  };
+  const ALT = {"leg_press":["Swiss Ball Dumbbell SQUATS","Weighted SUMO Squats","Bench Bodyweight Step-Ups"],
+    "leg_press_single":["Bench Bodyweight Step-Ups","Plate Reverse Lunges","Seated Leg Press (Quads)"],
+    "chest_press":["Flat Bench Dumbbell Press","Flat Bench Dumbbell Press (NG)","Bent Knees Assisted Push-Ups"],
+    "flat_db_press":["Machine Chest Press","Flat Bench Press","Flat Bench Dumbbell Press (NG)"],
+    "incline_chest_press":["Machine Incline Chest Press","Band Upwards Chest Flys","Machine Chest Flys"],
+    "lat_pulldown":["Lat PullDowns (V Bar)","Lat PullDowns (Underhand Grip)","Bar Cable PullOvers"],
+    "lat_pulldown_under":["Lat PullDowns (V Bar)","Lat PullDowns (Wide Grip)","Seated Cable Rows (Underhand Grip)"],
+    "seated_row_vbar":["Seated Cable Rows (Underhand Grip)","Seated Cable Rows (Single Arm Grip)","Bent Over Single Arm Dumbbell Rows"],
+    "seated_row_single":["Bent Over Single Arm Dumbbell Rows","Seated Cable Rows (V Bar)","Half Kneel - Single Arm Cable Pulls"],
+    "wall_squat":["SUMO Squats","Swiss Ball Plate SQUATS","Bench Bodyweight Step-Ups"],
+    "shoulder_press":["Seated Overhead Dumbbell Press","Seated Military Press","Machine Shoulder Press (Close Grip)"],
+    "shoulder_press_close":["Seated Arnold Press","Single Arm Machine Shoulder Press (CG)","Seated Overhead Dumbbell Press"],
+    "db_overhead_press":["Machine Shoulder Press (Wide Grip)","Seated Arnold Press","Standing Overhead Dumbbell Press"],
+    "four_point":["Plank","Bench Leg Lifts","Lying Knee Raises"],
+    "db_romanian_deadlift":["Isolated DB Stiff Leg Dead-Lifts","Lying Leg Curls","Weighted SUMO Squats"],
+    "leg_curl":["Lying Leg Curls","Isolated Seated Leg Curls","Dumbbell Stiff Leg Dead-Lifts"],
+    "lying_leg_curl":["Seated Leg Curls","Isolated Seated Leg Curls","Dumbbell Stiff Leg Dead-Lifts"],
+    "rear_delt_band":["Bent Over Single Arm Dumbbell Rows","Half Kneel - Single Arm Cable Pulls","Seated Cable Rows (Underhand Grip)"],
+    "db_shrug":["Straight Bar Cable Shrugs","Standing Front Dumbbell Shrugs","Half Kneel - Single Arm Cable Pulls"],
+    "crunch":["Bench Crunches","Floor Abs Crunches (Legs Crossed)","Kneeling Cable Crunches"],
+    "knee_raise":["Lying Knee Raises","Bench Leg Lifts","Mountain Climbers"],
+    "woodchop":["Band Woodchoppers","Decline Cable Woodchoppers","Plate Woodchoppers"],
+    "plank":["Four Point Balance","Mountain Climbers","Bench Leg Lifts"],
+    "db_curl":["Straight Bar Cable Curls","EZ Barbell Curls (Wide Grip)","Standing Alternate Dumbbell Curls"],
+    "pushdown":["Rope Cable Extensions","EZ Cable Push Downs (Wide Grip)","Bent Knees Bench Dips"],
+    "db_squat_ball":["Weighted SUMO Squats","Swiss Ball Plate SQUATS","Seated Leg Press"],
+    "step_up":["Bodyweight Reverse Lunges","Plate Reverse Lunges","SUMO Squats"],
+    "calf_raise":["Seated Leg Press Calf Extension","Single-Leg Standing Calf Raises","Bench Bodyweight Step-Ups"],
+    "db_row":["Seated Cable Rows (Single Arm Grip)","Seated Cable Rows (V Bar)","Half Kneel - Single Arm Cable Pulls"],
+    "hammer_curl":["Seated Hammer Curls","Standing Alternate Hammer Curls","Rope Cable Curls"],
+    "hip_thrust":["Weighted SUMO Squats","Bench Bodyweight Step-Ups","Plate Reverse Lunges"],
+    "reverse_lunge":["Bench Bodyweight Step-Ups","Plate Reverse Lunges","SUMO Squats"],
+    "leg_ext":["Isolated Leg Extensions","Seated Leg Press (Quads)","Swiss Ball Wall SQUATS"]};
+
   // [light, medium, heavy, step, unit]  — kg; "ph" = per hand (dumbbells), "" = machine / cable total
   const KGM = {
     leg_press:["40–60","70–100","110–140",5,""], leg_press_single:["20–30","35–50","55–70",5,""],
@@ -971,11 +995,28 @@ nav.tabs button[aria-selected="true"]{color:var(--hot);background:var(--soft)}
     "Band Woodchoppers":["Light band","Medium band","Heavy band","band",""], "Straight Bar Cable Curls":["10–15","17.5–25","27.5–35",2.5,""],
     "Rope Cable Extensions":["10–15","17.5–25","27.5–35",2.5,""], "Weighted SUMO Squats":["8–12","14–20","22–30",2,"ph"],
     "Seated Leg Press Calf Extension":["40–60","70–100","110–140",5,""], "Seated Cable Rows (Single Arm Grip)":KGM.seated_row_single,
-    "Seated Hammer Curls":KGM.hammer_curl, "Isolated Leg Extensions":["8–12","15–20","22–30",2.5,""]
+    "Seated Hammer Curls":KGM.hammer_curl, "Isolated Leg Extensions":["8–12","15–20","22–30",2.5,""],
+    "Plate Reverse Lunges":["2.5–5","7.5–10","12.5–20",2.5,""], "Seated Leg Press (Quads)":KGM.leg_press, "Seated Leg Press":KGM.leg_press,
+    "Flat Bench Dumbbell Press (NG)":KGM.flat_db_press, "Flat Bench Press":["20–30","35–50","55–70",5,""], "Machine Chest Flys":["15–25","30–40","45–55",5,""],
+    "Band Upwards Chest Flys":["Light band","Medium band","Heavy band","band",""], "Lat PullDowns (Underhand Grip)":KGM.lat_pulldown_under,
+    "Lat PullDowns (Wide Grip)":KGM.lat_pulldown, "Bar Cable PullOvers":["10–15","17.5–25","27.5–35",2.5,""], "Seated Cable Rows (V Bar)":KGM.seated_row_vbar,
+    "Half Kneel - Single Arm Cable Pulls":["5–10","12.5–17.5","20–25",2.5,""], "Swiss Ball Plate SQUATS":["5–10","10–20","20–25",2.5,""],
+    "Seated Military Press":["10–20","25–35","40–50",5,""], "Machine Shoulder Press (Close Grip)":KGM.shoulder_press_close,
+    "Single Arm Machine Shoulder Press (CG)":["5–10","12.5–17.5","20–25",2.5,""], "Standing Overhead Dumbbell Press":["4–8","10–12","14–18",2,"ph"],
+    "Isolated Seated Leg Curls":["10–15","17.5–25","27.5–35",2.5,""], "Dumbbell Stiff Leg Dead-Lifts":KGM.db_romanian_deadlift,
+    "Standing Front Dumbbell Shrugs":KGM.db_shrug, "Kneeling Cable Crunches":["15–25","30–40","45–55",5,""], "Decline Cable Woodchoppers":KGM.woodchop,
+    "Plate Woodchoppers":["2.5–5","5–10","10–15",2.5,""], "EZ Barbell Curls (Wide Grip)":["10–15","17.5–25","27.5–35",2.5,""],
+    "Standing Alternate Dumbbell Curls":KGM.db_curl, "EZ Cable Push Downs (Wide Grip)":KGM.pushdown, "Standing Alternate Hammer Curls":KGM.hammer_curl,
+    "Rope Cable Curls":["10–15","17.5–25","27.5–35",2.5,""]
   };
-  const BW_NAMES = new Set(["Bench Bodyweight Step-Ups","SUMO Squats","Plank","Four Point Balance","Bench Crunches","Lying Knee Raises","Bodyweight Reverse Lunges"]);
-  const exName = key => key.startsWith("alt_") ? (ALT[key.slice(4)] || key) : (EX[key]?.[0] || key);
-  const swapped = new Set(); // "date|id" rows switched to the alternative
+  const BW_NAMES = new Set(["Bench Bodyweight Step-Ups","SUMO Squats","Plank","Four Point Balance","Bench Crunches","Lying Knee Raises","Bodyweight Reverse Lunges",
+    "Bent Knees Assisted Push-Ups","Bench Leg Lifts","Mountain Climbers","Floor Abs Crunches (Legs Crossed)","Bent Knees Bench Dips","Single-Leg Standing Calf Raises","Swiss Ball Wall SQUATS"]);
+  // alternative storage keys: alt_<id> (1st), alt2_<id>, alt3_<id>
+  const altKey = (id,i) => (i===0 ? "alt_" : "alt"+(i+1)+"_") + id;
+  const parseKey = key => { const m=String(key).match(/^alt(\d*)_(.+)$/); return m ? {base:m[2], alt: m[1] ? (+m[1]-1) : 0} : {base:key, alt:-1}; };
+  const KEY_PREFIXES = ["","alt_","alt2_","alt3_"];
+  const exName = key => { const p=parseKey(key); return p.alt>=0 ? ((ALT[p.base]||[])[p.alt] || key) : (EX[key]?.[0] || key); };
+  const choice = {}; // "date|id" -> -1 planned, 0..2 alternative picked on screen
 
   function stars(name){
     const l=linkFor(name); const w=document.createElement("span"); w.className="links";
@@ -1016,7 +1057,14 @@ nav.tabs button[aria-selected="true"]{color:var(--hot);background:var(--soft)}
     hip_thrust:[["glutes"],["hamstrings","lower_back"]], reverse_lunge:[["quads","glutes"],["hamstrings","calves"]], leg_ext:[["quads"],[]]
   };
   // alternatives use the muscles of the exercise they replace, except where the movement changes
-  const MUS_ALT = {"Lying Leg Curls":MUS.lying_leg_curl,"Seated Leg Curls":MUS.leg_curl,"Straight Bar Cable Shrugs":MUS.db_shrug,"Plank":MUS.plank,"Four Point Balance":MUS.four_point,
+  const MUS_ALT = {"Bent Knees Assisted Push-Ups":[["chest"],["delts_front","triceps","abs"]],"Bent Knees Bench Dips":[["triceps"],["chest","delts_front"]],
+    "Mountain Climbers":[["abs"],["obliques","quads","delts_front"]],"Bench Leg Lifts":[["abs"],["obliques"]],"Machine Chest Flys":[["chest"],["delts_front"]],
+    "Band Upwards Chest Flys":[["chest","delts_front"],[]],"Bar Cable PullOvers":[["lats"],["triceps","upper_back"]],"Kneeling Cable Crunches":[["abs"],["obliques"]],
+    "Half Kneel - Single Arm Cable Pulls":[["lats","upper_back"],["biceps","delts_rear"]],"Standing Front Dumbbell Shrugs":[["traps"],["forearms"]],
+    "Isolated Seated Leg Curls":[["hamstrings"],["calves"]],"Dumbbell Stiff Leg Dead-Lifts":[["hamstrings","glutes"],["lower_back","forearms"]],
+    "Seated Leg Press (Quads)":[["quads"],["glutes"]],"Swiss Ball Wall SQUATS":[["quads","glutes"],["hamstrings"]],"Single-Leg Standing Calf Raises":[["calves"],[]],
+    "Seated Leg Press Calf Extension":[["calves"],[]],"Bench Bodyweight Step-Ups":[["quads","glutes"],["hamstrings","calves"]],"Plate Reverse Lunges":[["quads","glutes"],["hamstrings","calves"]],
+    "Weighted SUMO Squats":[["quads","glutes"],["hamstrings"]],"Lying Leg Curls":MUS.lying_leg_curl,"Seated Leg Curls":MUS.leg_curl,"Straight Bar Cable Shrugs":MUS.db_shrug,"Plank":MUS.plank,"Four Point Balance":MUS.four_point,
     "Bent Over Single Arm Dumbbell Rows":MUS.db_row,"Seated Leg Press Calf Extension":MUS.calf_raise,"Weighted SUMO Squats":[["quads","glutes"],["hamstrings"]],"SUMO Squats":[["quads","glutes"],["hamstrings"]]};
   const MLABEL = {quads:"Quads",glutes:"Glutes",hamstrings:"Hamstrings",calves:"Calves",chest:"Chest",delts_front:"Front shoulders",delts_side:"Side shoulders",
     delts_rear:"Rear shoulders",triceps:"Triceps",biceps:"Biceps",forearms:"Forearms",abs:"Abs",obliques:"Obliques",lats:"Lats",upper_back:"Upper back",traps:"Traps",lower_back:"Lower back"};
@@ -1078,11 +1126,13 @@ nav.tabs button[aria-selected="true"]{color:var(--hot);background:var(--soft)}
   function exRow(n, e, d, editable, setsLabel){
     const [id, reps, wt, rest] = e;
     const savedL = (rows[d] && rows[d].lifts) || {};
-    const savedAlt = savedL["alt_"+id+"_kg"]!=null || savedL["alt_"+id+"_reps"]!=null;
-    const altOn = !!(editable && ALT[id] && (swapped.has(d+"|"+id) || (savedAlt && !swapped.has(d+"|"+id+"|off"))));
-    const key = altOn ? "alt_"+id : id;
+    const alts = ALT[id] || [];
+    const savedIdx = alts.findIndex((_,i)=> savedL[altKey(id,i)+"_kg"]!=null || savedL[altKey(id,i)+"_reps"]!=null);
+    const pick = !editable ? -1 : (choice[d+"|"+id] ?? savedIdx);
+    const altOn = pick>=0;
+    const key = altOn ? altKey(id,pick) : id;
     const info = EX[id] || [id,"",""];
-    const name = altOn ? ALT[id] : info[0];
+    const name = altOn ? alts[pick] : info[0];
     const bw = altOn ? BW_NAMES.has(name) : !!info[3];
     const range = altOn ? KGA[name] : KGM[id];
     const box=document.createElement("div"); box.className="ex";
@@ -1090,7 +1140,7 @@ nav.tabs button[aria-selected="true"]{color:var(--hot);background:var(--soft)}
     const no=document.createElement("div"); no.className="no"; no.textContent=n;
     const txt=document.createElement("div");
     const nm=document.createElement("div"); nm.className="nm"; nm.textContent=name;
-    if (altOn){ const tag=document.createElement("span"); tag.className="alttag"; tag.textContent="Alternative"; nm.append(" ",tag); }
+    if (altOn){ const tag=document.createElement("span"); tag.className="alttag"; tag.textContent="Alternative "+(pick+1); nm.append(" ",tag); }
     const rx=document.createElement("div"); rx.className="rx"; rx.innerHTML="<b></b> · <span></span> · rest <span></span>";
     rx.children[0].textContent=reps; rx.children[1].textContent=wt; rx.children[2].textContent=rest;
     txt.append(nm,rx,stars(name)); head.append(no,txt); box.append(head);
@@ -1164,16 +1214,20 @@ nav.tabs button[aria-selected="true"]{color:var(--hot);background:var(--soft)}
     panel.append(list);
     syncReps();
     body.append(panel);
-    if (ALT[id]){
-      const alt=document.createElement("div"); alt.className="alt";
-      const lab=document.createElement("div"); lab.className="altname";
-      const other = altOn ? info[0] : ALT[id];
-      lab.innerHTML="<small></small><span></span>"; lab.children[0].textContent = altOn ? "Planned exercise" : "Alternative"; lab.children[1].textContent=other;
-      lab.append(stars(other));
-      const b=document.createElement("button"); b.type="button"; b.textContent = altOn ? "Switch back" : "Use instead";
-      b.onclick=()=>{ const k=d+"|"+id; if(altOn){ swapped.delete(k); swapped.add(k+"|off"); } else { swapped.add(k); swapped.delete(k+"|off"); }
-        const fresh=exRow(n, e, d, true, setsLabel); box.replaceWith(fresh); updateProgress(); };
-      alt.append(lab,b); body.append(alt);
+    if (alts.length){
+      const wrap=document.createElement("div"); wrap.className="alts";
+      const hd=document.createElement("div"); hd.className="altshd"; hd.textContent = altOn ? "Other options" : "Alternatives · same sets and reps"; wrap.append(hd);
+      const opts=[[-1, info[0]], ...alts.map((nm2,i)=>[i,nm2])].filter(o=>o[0]!==pick);
+      opts.forEach(([i,label])=>{
+        const row=document.createElement("div"); row.className="alt";
+        const lab=document.createElement("div"); lab.className="altname";
+        lab.innerHTML="<small></small><span></span>"; lab.children[0].textContent = i<0 ? "Planned exercise" : "Alternative "+(i+1); lab.children[1].textContent=label;
+        lab.append(stars(label));
+        const btn=document.createElement("button"); btn.type="button"; btn.textContent = i<0 ? "Switch back" : "Use instead";
+        btn.onclick=()=>{ choice[d+"|"+id]=i; tap(); const fresh=exRow(n, e, d, true, setsLabel); box.replaceWith(fresh); updateProgress(); };
+        row.append(lab,btn); wrap.append(row);
+      });
+      body.append(wrap);
     }
     box.append(body);
     return box;
@@ -1236,7 +1290,7 @@ nav.tabs button[aria-selected="true"]{color:var(--hot);background:var(--soft)}
     if(!db){ if(!silent) $("wost").textContent="Open this page in claude.ai to save."; return null; }
     const d=woDate; const prev=rows[d]||{date:d}; const lifts=Object.assign({}, prev.lifts||{});
     const ins=[...$("woBody").querySelectorAll("input[data-id]")];
-    new Set(ins.map(i=>i.dataset.base)).forEach(b=>{ ["","alt_"].forEach(pre=>["kg","reps"].forEach(k=>delete lifts[pre+b+"_"+k])); });
+    new Set(ins.map(i=>i.dataset.base)).forEach(b=>{ KEY_PREFIXES.forEach(pre=>["kg","reps"].forEach(k=>delete lifts[pre+b+"_"+k])); });
     const byKey={}; ins.forEach(i=>{ (byKey[i.dataset.id]=byKey[i.dataset.id]||{})[i.dataset.k]=i.value.trim(); });
     let any=false;
     Object.entries(byKey).forEach(([k,v])=>{ if(!v.reps) return; any=true; lifts[k+"_reps"]=v.reps; if(v.kg!==undefined && v.kg!=="") lifts[k+"_kg"]=Number(v.kg); });
@@ -1356,7 +1410,7 @@ nav.tabs button[aria-selected="true"]{color:var(--hot);background:var(--soft)}
         wo.groups.forEach(g=>{ const h=document.createElement("div"); h.className="grouphd"; h.textContent="Both × "+g.sets; body.append(h);
           g.items.forEach(e=>{ const info=EX[e[0]]||[e[0]]; const row=document.createElement("div"); row.className="mini";
             const a=document.createElement("span"); a.textContent=info[0]; a.append(stars(info[0]));
-            const lk = r && r.lifts ? (r.lifts[e[0]+"_kg"]!=null ? r.lifts[e[0]+"_kg"] : r.lifts["alt_"+e[0]+"_kg"]) : null;
+            const lk = r && r.lifts ? (KEY_PREFIXES.map(pre=>r.lifts[pre+e[0]+"_kg"]).find(v=>v!=null) ?? null) : null;
             const lifted = lk!=null ? " · "+lk+" kg" : "";
             const b=document.createElement("span"); b.textContent=e[1]+" · "+e[3]+lifted; row.append(a,b); body.append(row); }); });
         const f=document.createElement("div"); f.className="finisher"; f.innerHTML="<b>FINISHER</b><span></span>"; f.children[1].textContent=wo.finisher; body.append(f);
