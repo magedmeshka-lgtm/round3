@@ -1,5 +1,5 @@
 // Keeps Round 3 working offline. The app's own files are cached on the phone; fonts are cached the first time they load.
-const CACHE = "round3-v4";
+const CACHE = "round3-v5";
 const FILES = ["./", "index.html", "manifest.webmanifest", "icon-192.png", "icon-512.png", "apple-touch-icon.png"];
 
 self.addEventListener("install", e => {

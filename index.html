@@ -155,16 +155,34 @@ ol,ul{margin:6px 0 0;padding-left:20px} li{margin:3px 0}
 .bkey i{flex:0 0 9px;height:9px;border-radius:2px;display:inline-block}
 .bkey .kp{background:var(--hot)} .bkey .ks{background:var(--warn);opacity:.6}
 .pzwrap{display:flex;flex-direction:column;gap:6px;width:100%}
-.pzsvg{width:100%;height:auto;display:block;background:var(--card);border-radius:10px}
-.pz-skin{fill:var(--pzskin)}.pz-far{fill:var(--pzfar)}.pz-body{stroke:var(--pzline);stroke-width:1.1;stroke-linejoin:round}
-.pz-head{fill:var(--pzskin);stroke:var(--pzline);stroke-width:1.2}
-.pz-pri{fill:var(--pzpri);stroke:var(--pzpri);stroke-width:.6}.pz-sec{fill:var(--pzsec);stroke:var(--pzsec);stroke-width:.6}
-.pz-eq{stroke:var(--pzeq);fill:var(--pzeq)}.pz-eqd{stroke:var(--pzeqd);fill:var(--pzeqd)}rect.pz-eq,rect.pz-eqd{stroke:none}
-.pz-ball{fill:var(--pzball);stroke:var(--pzline);stroke-width:1.2}.pz-band{stroke:var(--good)}
-.pz-arrow{stroke:var(--hot);stroke-width:3}.pz-arrowhead{fill:var(--hot)}
-.pz-lbl{font-size:13px;font-weight:700;letter-spacing:2px;fill:var(--muted);font-family:var(--body)}
-.pz-lead{stroke:var(--muted);stroke-width:.9;fill:none}.pz-dot{fill:var(--fg)}
-.pz-tag{font-size:11.5px;fill:var(--fg);font-family:var(--body);font-weight:500;paint-order:stroke;stroke:var(--card);stroke-width:3px;stroke-linejoin:round}.pz-tagp{font-weight:700}
+.pzsvg{width:100%;height:auto;display:block;border-radius:12px;background:radial-gradient(ellipse at 50% 42%,#2B313C 0%,#161A21 70%,#101318 100%)}
+.pz-skin{fill:url(#pzg)}.pz-far{fill:url(#pzgf)}.pz-body{stroke:#58606E;stroke-width:.8;stroke-linejoin:round}
+.pz-head{fill:url(#pzg);stroke:#58606E;stroke-width:.8}
+.pz-pri{fill:url(#pzm);stroke:#7CC4FF;stroke-width:1.1;filter:url(#pzglow)}
+.pz-sec{fill:#FFB25E;fill-opacity:.85;stroke:#7CC4FF;stroke-width:.7;stroke-opacity:.6}
+.pz-eq{stroke:#3B424E;fill:#3B424E}.pz-eqd{stroke:#5A6270;fill:#5A6270}rect.pz-eq,rect.pz-eqd{stroke:none}
+.pz-ball{fill:#3D6E9E;stroke:#7CC4FF;stroke-width:1}.pz-band{stroke:#5CC48A}
+.pz-arrow{stroke:#FF7A45;stroke-width:3}.pz-arrowhead{fill:#FF7A45}
+.pz-lbl{font-size:13px;font-weight:700;letter-spacing:2px;fill:#9AA4BC;font-family:var(--body)}
+.pz-lead{stroke:#9AA4BC;stroke-width:.9;fill:none}.pz-dot{fill:#7CC4FF}
+.pz-tag{font-size:11.5px;fill:#F2F5FA;font-family:var(--body);font-weight:500;paint-order:stroke;stroke:#14181F;stroke-width:3px;stroke-linejoin:round}.pz-tagp{font-weight:700;fill:#FFB089}
+.pzovc .bkey{color:var(--muted)}
+/* muscle picker */
+.mgroups{display:flex;gap:8px;overflow-x:auto;padding:2px 2px 6px;scrollbar-width:thin}
+.mg{flex:0 0 auto;width:74px;display:flex;flex-direction:column;align-items:center;gap:4px;padding:6px 4px 8px;border-radius:12px;border:1.5px solid #262C37;
+  background:radial-gradient(ellipse at 50% 40%,#2B313C,#14181F);color:#C9D1E0;font-size:.74rem;font-weight:600;letter-spacing:.02em}
+.mg svg{width:44px;height:auto;display:block}
+.mg[aria-pressed="true"]{border-color:#FF7A45;box-shadow:0 0 0 1px #FF7A45,0 0 14px rgba(255,122,69,.45);color:#fff}
+.an-sil{fill:url(#pzg);stroke:#58606E;stroke-width:1}.an-off{fill:#9AA2AF;stroke:#C9CED6;stroke-width:.6}.an-on{fill:url(#pzm);stroke:#7CC4FF;stroke-width:1.2;filter:url(#pzglow)}
+.mlist{display:flex;flex-direction:column;gap:12px}
+.mitem{display:flex;flex-direction:column;gap:6px;padding-bottom:12px;border-bottom:1px solid var(--line)}
+.mitem:last-child{border-bottom:0;padding-bottom:0}
+.mitem .t{display:flex;justify-content:space-between;gap:8px;align-items:baseline;flex-wrap:wrap}
+.mitem .t b{font-size:.98rem}.mitem .in{font-size:.76rem;color:var(--muted)}
+.mrole{font-size:.68rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;border-radius:999px;padding:2px 8px;color:#fff;background:var(--hot)}
+.mrole.s{background:var(--warn)}
+.malt{display:flex;flex-direction:column;gap:6px}
+.malt .row2{display:flex;justify-content:space-between;gap:8px;align-items:center;flex-wrap:wrap;font-size:.9rem;padding:6px 0;border-bottom:1px dashed var(--line)}
 .pzwrap{cursor:zoom-in}.pzhint{font-size:.74rem;color:var(--accent);font-weight:600}
 .pzov{position:fixed;inset:0;z-index:70;background:rgba(10,14,28,.6);display:flex;justify-content:center;align-items:flex-start;overflow-y:auto;
   padding:calc(12px + env(safe-area-inset-top,0px)) max(12px,env(safe-area-inset-right,0px)) calc(12px + env(safe-area-inset-bottom,0px)) max(12px,env(safe-area-inset-left,0px))}
@@ -366,6 +384,11 @@ nav.tabs button[aria-selected="true"]{color:var(--hot);background:var(--soft)}
 
   <!-- ===================== PLAN ===================== -->
   <section class="panel" id="p-plan" role="tabpanel" aria-labelledby="t-plan" hidden>
+    <div class="card" id="mpick">
+      <h2>Exercises by muscle</h2>
+      <div class="mgroups" id="mgroups" role="group" aria-label="Choose a muscle group"></div>
+      <div id="mlist" class="mlist"><div class="empty">Tap a muscle group to see every exercise in your plan that works it.</div></div>
+    </div>
     <div class="card">
       <div class="weeks" id="weeks" role="group" aria-label="Choose week"></div>
       <div class="row" style="justify-content:space-between;align-items:baseline">
@@ -531,6 +554,12 @@ nav.tabs button[aria-selected="true"]{color:var(--hot);background:var(--soft)}
   </section>
 </div>
 
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><defs>
+<linearGradient id="pzg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#E4E8EE"/><stop offset=".55" stop-color="#AEB5C0"/><stop offset="1" stop-color="#7C8493"/></linearGradient>
+<linearGradient id="pzgf" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#8F96A3"/><stop offset="1" stop-color="#5A616E"/></linearGradient>
+<linearGradient id="pzm" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#FF8A4C"/><stop offset="1" stop-color="#F0442A"/></linearGradient>
+<filter id="pzglow" x="-40%" y="-40%" width="180%" height="180%"><feGaussianBlur in="SourceGraphic" stdDeviation="2.4" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+</defs></svg>
 <div class="pzov" id="pzov" hidden role="dialog" aria-modal="true" aria-labelledby="pzt">
   <div class="pzovc"><div class="top"><h3 id="pzt"></h3><button type="button" id="pzx">Close</button></div><div id="pzb"></div><div id="pzk" class="bkey"></div></div>
 </div>
@@ -1366,9 +1395,9 @@ nav.tabs button[aria-selected="true"]{color:var(--hot);background:var(--soft)}
       if (spec.hold) return big ? `<svg viewBox="0 -40 270 292" role="img" class="pzsvg pzbig">${panel(spec,spec.states[0],mus,"HOLD",0,0,true)}</svg>`
                                 : `<svg viewBox="-150 -40 570 292" role="img" class="pzsvg">${panel(spec,spec.states[0],mus,"HOLD",0,0,false)}</svg>`;
       if (big) return `<svg viewBox="0 -40 270 590" role="img" class="pzsvg pzbig">${panel(spec,spec.states[0],mus,"START",0,0,false)}
-        <path d="M135 252 L135 270" class="pz-arrow" marker-end="url(#pzar)"/>${panel(spec,spec.states[1],mus,"FINISH",0,300,true)}${ARROW_DEF}</svg>`;
+        <path d="M135 252 L135 266" class="pz-arrow"/><path d="M126 264 L135 280 L144 264 Z" class="pz-arrowhead"/>${panel(spec,spec.states[1],mus,"FINISH",0,300,true)}${ARROW_DEF}</svg>`;
       return `<svg viewBox="0 -40 570 292" role="img" class="pzsvg">${panel(spec,spec.states[0],mus,"START",0,0,false)}
-        <path d="M268 112 L292 112" class="pz-arrow" marker-end="url(#pzar)"/>${panel(spec,spec.states[1],mus,"FINISH",300,0,false)}${ARROW_DEF}</svg>`;
+        <path d="M266 112 L288 112" class="pz-arrow"/><path d="M286 103 L300 112 L286 121 Z" class="pz-arrowhead"/>${panel(spec,spec.states[1],mus,"FINISH",300,0,false)}${ARROW_DEF}</svg>`;
     }
     return {draw, has:id=>!!POSES[id]};
   })();
@@ -1381,6 +1410,26 @@ nav.tabs button[aria-selected="true"]{color:var(--hot);background:var(--soft)}
   function shrinkPhoto(file){ return new Promise(res=>{ const r=new FileReader(); r.onload=()=>{ const im=new Image(); im.onload=()=>{
       const k=Math.min(1, 1000/Math.max(im.width,im.height)); const c=document.createElement("canvas"); c.width=Math.round(im.width*k); c.height=Math.round(im.height*k);
       c.getContext("2d").drawImage(im,0,0,c.width,c.height); res(c.toDataURL("image/jpeg",0.8)); }; im.onerror=()=>res(null); im.src=r.result; }; r.onerror=()=>res(null); r.readAsDataURL(file); }); }
+  function muscleKey(muscles){
+    const k=document.createElement("div"); k.className="bkey";
+    k.innerHTML='<span><i class="kp"></i></span>'+(muscles[1].length?'<span><i class="ks"></i></span>':'');
+    k.children[0].append("Main: "+muscles[0].map(x=>MLABEL[x]).join(", "));
+    if (muscles[1].length) k.children[1].append("Helpers: "+muscles[1].map(x=>MLABEL[x]).join(", "));
+    return k;
+  }
+  function openBig(name, poseId, muscles){
+    $("pzt").textContent=name; $("pzb").innerHTML=PZ.draw(poseId, muscles[0], muscles[1], true);
+    $("pzk").innerHTML=""; $("pzk").append(muscleKey(muscles)); $("pzov").hidden=false; tap();
+  }
+  function drawingCard(name, poseId, muscles){
+    if (!(poseId && PZ.has(poseId) && muscles)) return null;
+    const w=document.createElement("div"); w.className="pzwrap"; w.innerHTML=PZ.draw(poseId, muscles[0], muscles[1]);
+    w.setAttribute("role","button"); w.tabIndex=0; w.setAttribute("aria-label","Show "+name+" with muscle names");
+    const hint=document.createElement("div"); hint.className="pzhint"; hint.textContent="Tap the drawing to see the muscles by name"; w.append(hint);
+    w.onclick=()=>openBig(name, poseId, muscles); w.onkeydown=e=>{ if(e.key==="Enter"||e.key===" "){ e.preventDefault(); openBig(name, poseId, muscles); } };
+    w.append(muscleKey(muscles));
+    return w;
+  }
   function visual(key, name, muscles, poseId){
     const box=document.createElement("div"); box.className="visual";
     const ph = photos[key] || photos[name];
@@ -1393,19 +1442,8 @@ nav.tabs button[aria-selected="true"]{color:var(--hot);background:var(--soft)}
       let img=box.querySelector("img.exphoto"); if(!img){ img=document.createElement("img"); img.className="exphoto"; img.alt=name; box.prepend(img); }
       img.src=url; pick.firstChild.nodeValue="Change photo"; tap(15); };
     pick.append(inp); box.append(pick);
-    const pic = poseId && PZ.has(poseId) && muscles ? PZ.draw(poseId, muscles[0], muscles[1]) : null;
-    if (pic){
-      const w=document.createElement("div"); w.className="pzwrap"; w.innerHTML=pic; w.setAttribute("role","button"); w.tabIndex=0;
-      w.setAttribute("aria-label","Show "+name+" with muscle names");
-      const hint=document.createElement("div"); hint.className="pzhint"; hint.textContent="Tap the drawing to see the muscles by name"; w.append(hint);
-      const open=()=>{ $("pzt").textContent=name; $("pzb").innerHTML=PZ.draw(poseId, muscles[0], muscles[1], true); $("pzk").innerHTML=""; $("pzk").append(k.cloneNode(true)); $("pzov").hidden=false; tap(); };
-      w.onclick=open; w.onkeydown=e=>{ if(e.key==="Enter"||e.key===" "){ e.preventDefault(); open(); } };
-      const k=document.createElement("div"); k.className="bkey";
-      k.innerHTML='<span><i class="kp"></i></span>'+(muscles[1].length?'<span><i class="ks"></i></span>':'');
-      k.children[0].append("Main: "+muscles[0].map(x=>MLABEL[x]).join(", "));
-      if (muscles[1].length) k.children[1].append("Helpers: "+muscles[1].map(x=>MLABEL[x]).join(", "));
-      w.append(k); box.append(w);
-    } else { const bm=bodyMap(muscles); if(bm) box.append(bm); }
+    const dw = drawingCard(name, poseId, muscles);
+    if (dw) box.append(dw); else { const bm=bodyMap(muscles); if(bm) box.append(bm); }
     return box;
   }
 
@@ -1658,7 +1696,61 @@ nav.tabs button[aria-selected="true"]{color:var(--hot);background:var(--soft)}
       box.append(b);
     }
   }
+  // ---------- muscle picker
+  const ANAT = {"sil":"M90.0,62.0 C86.3,64.3 91.3,72.3 88.0,76.0 C84.7,79.7 76.0,81.7 70.0,84.0 C64.0,86.3 57.0,87.7 52.0,90.0 C47.0,92.3 43.0,94.3 40.0,98.0 C37.0,101.7 35.3,107.0 34.0,112.0 C32.7,117.0 32.7,121.7 32.0,128.0 C31.3,134.3 30.7,142.7 30.0,150.0 C29.3,157.3 28.7,165.3 28.0,172.0 C27.3,178.7 26.7,183.3 26.0,190.0 C25.3,196.7 24.7,204.3 24.0,212.0 C23.3,219.7 22.3,229.7 22.0,236.0 C21.7,242.3 22.3,245.7 22.0,250.0 C21.7,254.3 20.0,257.3 20.0,262.0 C20.0,266.7 20.7,274.3 22.0,278.0 C23.3,281.7 26.0,284.3 28.0,284.0 C30.0,283.7 32.7,280.3 34.0,276.0 C35.3,271.7 35.3,262.7 36.0,258.0 C36.7,253.3 37.0,254.0 38.0,248.0 C39.0,242.0 40.7,230.3 42.0,222.0 C43.3,213.7 45.0,204.0 46.0,198.0 C47.0,192.0 47.0,192.3 48.0,186.0 C49.0,179.7 50.7,167.7 52.0,160.0 C53.3,152.3 54.7,144.7 56.0,140.0 C57.3,135.3 59.0,130.3 60.0,132.0 C61.0,133.7 61.3,142.7 62.0,150.0 C62.7,157.3 63.3,168.3 64.0,176.0 C64.7,183.7 66.0,189.7 66.0,196.0 C66.0,202.3 65.0,208.0 64.0,214.0 C63.0,220.0 61.0,226.7 60.0,232.0 C59.0,237.3 58.7,239.7 58.0,246.0 C57.3,252.3 56.3,261.0 56.0,270.0 C55.7,279.0 55.3,290.0 56.0,300.0 C56.7,310.0 59.0,322.3 60.0,330.0 C61.0,337.7 62.0,340.0 62.0,346.0 C62.0,352.0 60.0,358.3 60.0,366.0 C60.0,373.7 61.0,384.7 62.0,392.0 C63.0,399.3 65.7,405.3 66.0,410.0 C66.3,414.7 65.3,417.0 64.0,420.0 C62.7,423.0 58.3,425.7 58.0,428.0 C57.7,430.3 57.3,433.0 62.0,434.0 C66.7,435.0 81.7,435.3 86.0,434.0 C90.3,432.7 87.7,429.7 88.0,426.0 C88.3,422.3 87.7,418.0 88.0,412.0 C88.3,406.0 89.7,398.0 90.0,390.0 C90.3,382.0 89.7,371.3 90.0,364.0 C90.3,356.7 91.3,353.3 92.0,346.0 C92.7,338.7 93.3,329.3 94.0,320.0 C94.7,310.7 95.3,299.7 96.0,290.0 C96.7,280.3 97.3,268.3 98.0,262.0 C98.7,255.7 99.3,252.0 100.0,252.0 C100.7,252.0 101.3,255.7 102.0,262.0 C102.7,268.3 103.3,280.3 104.0,290.0 C104.7,299.7 105.3,310.7 106.0,320.0 C106.7,329.3 107.3,338.7 108.0,346.0 C108.7,353.3 109.7,356.7 110.0,364.0 C110.3,371.3 109.7,382.0 110.0,390.0 C110.3,398.0 111.7,406.0 112.0,412.0 C112.3,418.0 111.7,422.3 112.0,426.0 C112.3,429.7 109.7,432.7 114.0,434.0 C118.3,435.3 133.3,435.0 138.0,434.0 C142.7,433.0 142.3,430.3 142.0,428.0 C141.7,425.7 137.3,423.0 136.0,420.0 C134.7,417.0 133.7,414.7 134.0,410.0 C134.3,405.3 137.0,399.3 138.0,392.0 C139.0,384.7 140.0,373.7 140.0,366.0 C140.0,358.3 138.0,352.0 138.0,346.0 C138.0,340.0 139.0,337.7 140.0,330.0 C141.0,322.3 143.3,310.0 144.0,300.0 C144.7,290.0 144.3,279.0 144.0,270.0 C143.7,261.0 142.7,252.3 142.0,246.0 C141.3,239.7 141.0,237.3 140.0,232.0 C139.0,226.7 137.0,220.0 136.0,214.0 C135.0,208.0 134.0,202.3 134.0,196.0 C134.0,189.7 135.3,183.7 136.0,176.0 C136.7,168.3 137.3,157.3 138.0,150.0 C138.7,142.7 139.0,133.7 140.0,132.0 C141.0,130.3 142.7,135.3 144.0,140.0 C145.3,144.7 146.7,152.3 148.0,160.0 C149.3,167.7 151.0,179.7 152.0,186.0 C153.0,192.3 153.0,192.0 154.0,198.0 C155.0,204.0 156.7,213.7 158.0,222.0 C159.3,230.3 161.0,242.0 162.0,248.0 C163.0,254.0 163.3,253.3 164.0,258.0 C164.7,262.7 164.7,271.7 166.0,276.0 C167.3,280.3 170.0,283.7 172.0,284.0 C174.0,284.3 176.7,281.7 178.0,278.0 C179.3,274.3 180.0,266.7 180.0,262.0 C180.0,257.3 178.3,254.3 178.0,250.0 C177.7,245.7 178.3,242.3 178.0,236.0 C177.7,229.7 176.7,219.7 176.0,212.0 C175.3,204.3 174.7,196.7 174.0,190.0 C173.3,183.3 172.7,178.7 172.0,172.0 C171.3,165.3 170.7,157.3 170.0,150.0 C169.3,142.7 168.7,134.3 168.0,128.0 C167.3,121.7 167.3,117.0 166.0,112.0 C164.7,107.0 163.0,101.7 160.0,98.0 C157.0,94.3 153.0,92.3 148.0,90.0 C143.0,87.7 136.0,86.3 130.0,84.0 C124.0,81.7 115.3,79.7 112.0,76.0 C108.7,72.3 113.7,64.3 110.0,62.0 C106.3,59.7 93.7,59.7 90.0,62.0 Z","front":{"traps":"M91.0,66.0 C90.2,65.3 91.8,74.7 89.0,78.0 C86.2,81.3 74.8,84.0 74.0,86.0 C73.2,88.0 80.7,90.7 84.0,90.0 C87.3,89.3 92.8,86.0 94.0,82.0 C95.2,78.0 91.8,66.7 91.0,66.0 Z M109.0,66.0 C109.8,65.3 108.2,74.7 111.0,78.0 C113.8,81.3 125.2,84.0 126.0,86.0 C126.8,88.0 119.3,90.7 116.0,90.0 C112.7,89.3 107.2,86.0 106.0,82.0 C104.8,78.0 108.2,66.7 109.0,66.0 Z","delts_side":"M48.0,93.0 C46.0,92.7 40.5,96.2 38.0,100.0 C35.5,103.8 33.7,110.7 33.0,116.0 C32.3,121.3 32.8,128.5 34.0,132.0 C35.2,135.5 38.3,139.3 40.0,137.0 C41.7,134.7 42.3,123.8 44.0,118.0 C45.7,112.2 49.3,106.2 50.0,102.0 C50.7,97.8 50.0,93.3 48.0,93.0 Z M152.0,93.0 C154.0,92.7 159.5,96.2 162.0,100.0 C164.5,103.8 166.3,110.7 167.0,116.0 C167.7,121.3 167.2,128.5 166.0,132.0 C164.8,135.5 161.7,139.3 160.0,137.0 C158.3,134.7 157.7,123.8 156.0,118.0 C154.3,112.2 150.7,106.2 150.0,102.0 C149.3,97.8 150.0,93.3 152.0,93.0 Z","delts_front":"M54.0,93.0 C52.0,94.8 50.5,99.5 49.0,104.0 C47.5,108.5 46.0,114.3 45.0,120.0 C44.0,125.7 41.8,136.2 43.0,138.0 C44.2,139.8 49.3,135.0 52.0,131.0 C54.7,127.0 56.8,119.2 59.0,114.0 C61.2,108.8 64.7,103.5 65.0,100.0 C65.3,96.5 62.8,94.2 61.0,93.0 C59.2,91.8 56.0,91.2 54.0,93.0 Z M146.0,93.0 C148.0,94.8 149.5,99.5 151.0,104.0 C152.5,108.5 154.0,114.3 155.0,120.0 C156.0,125.7 158.2,136.2 157.0,138.0 C155.8,139.8 150.7,135.0 148.0,131.0 C145.3,127.0 143.2,119.2 141.0,114.0 C138.8,108.8 135.3,103.5 135.0,100.0 C134.7,96.5 137.2,94.2 139.0,93.0 C140.8,91.8 144.0,91.2 146.0,93.0 Z","chest":"M98.0,97.0 C93.0,89.7 74.3,93.8 68.0,96.0 C61.7,98.2 61.3,104.7 60.0,110.0 C58.7,115.3 58.7,122.8 60.0,128.0 C61.3,133.2 64.2,138.0 68.0,141.0 C71.8,144.0 78.0,146.2 83.0,146.0 C88.0,145.8 95.5,148.2 98.0,140.0 C100.5,131.8 103.0,104.3 98.0,97.0 Z M102.0,97.0 C107.0,89.7 125.7,93.8 132.0,96.0 C138.3,98.2 138.7,104.7 140.0,110.0 C141.3,115.3 141.3,122.8 140.0,128.0 C138.7,133.2 135.8,138.0 132.0,141.0 C128.2,144.0 122.0,146.2 117.0,146.0 C112.0,145.8 104.5,148.2 102.0,140.0 C99.5,131.8 97.0,104.3 102.0,97.0 Z","biceps":"M44.0,142.0 C42.0,144.3 40.8,149.0 40.0,154.0 C39.2,159.0 38.7,167.0 39.0,172.0 C39.3,177.0 40.5,182.3 42.0,184.0 C43.5,185.7 46.3,185.0 48.0,182.0 C49.7,179.0 51.0,171.3 52.0,166.0 C53.0,160.7 54.0,154.3 54.0,150.0 C54.0,145.7 53.7,141.3 52.0,140.0 C50.3,138.7 46.0,139.7 44.0,142.0 Z M156.0,142.0 C158.0,144.3 159.2,149.0 160.0,154.0 C160.8,159.0 161.3,167.0 161.0,172.0 C160.7,177.0 159.5,182.3 158.0,184.0 C156.5,185.7 153.7,185.0 152.0,182.0 C150.3,179.0 149.0,171.3 148.0,166.0 C147.0,160.7 146.0,154.3 146.0,150.0 C146.0,145.7 146.3,141.3 148.0,140.0 C149.7,138.7 154.0,139.7 156.0,142.0 Z","forearms":"M40.0,193.0 C37.7,194.8 34.8,200.5 33.0,206.0 C31.2,211.5 29.7,219.7 29.0,226.0 C28.3,232.3 28.2,240.7 29.0,244.0 C29.8,247.3 32.2,248.7 34.0,246.0 C35.8,243.3 38.2,234.2 40.0,228.0 C41.8,221.8 43.8,214.5 45.0,209.0 C46.2,203.5 47.8,197.7 47.0,195.0 C46.2,192.3 42.3,191.2 40.0,193.0 Z M160.0,193.0 C162.3,194.8 165.2,200.5 167.0,206.0 C168.8,211.5 170.3,219.7 171.0,226.0 C171.7,232.3 171.8,240.7 171.0,244.0 C170.2,247.3 167.8,248.7 166.0,246.0 C164.2,243.3 161.8,234.2 160.0,228.0 C158.2,221.8 156.2,214.5 155.0,209.0 C153.8,203.5 152.2,197.7 153.0,195.0 C153.8,192.3 157.7,191.2 160.0,193.0 Z","abs":"M87.0,150.0 C88.8,147.3 96.2,147.3 98.0,150.0 C99.8,152.7 99.8,163.3 98.0,166.0 C96.2,168.7 88.8,168.7 87.0,166.0 C85.2,163.3 85.2,152.7 87.0,150.0 Z M113.0,150.0 C111.2,147.3 103.8,147.3 102.0,150.0 C100.2,152.7 100.2,163.3 102.0,166.0 C103.8,168.7 111.2,168.7 113.0,166.0 C114.8,163.3 114.8,152.7 113.0,150.0 Z M87.0,170.0 C88.8,167.3 96.2,167.3 98.0,170.0 C99.8,172.7 99.8,183.3 98.0,186.0 C96.2,188.7 88.8,188.7 87.0,186.0 C85.2,183.3 85.2,172.7 87.0,170.0 Z M113.0,170.0 C111.2,167.3 103.8,167.3 102.0,170.0 C100.2,172.7 100.2,183.3 102.0,186.0 C103.8,188.7 111.2,188.7 113.0,186.0 C114.8,183.3 114.8,172.7 113.0,170.0 Z M87.0,190.0 C88.7,187.3 96.2,187.3 98.0,190.0 C99.8,192.7 99.7,203.3 98.0,206.0 C96.3,208.7 89.8,208.7 88.0,206.0 C86.2,203.3 85.3,192.7 87.0,190.0 Z M113.0,190.0 C111.3,187.3 103.8,187.3 102.0,190.0 C100.2,192.7 100.3,203.3 102.0,206.0 C103.7,208.7 110.2,208.7 112.0,206.0 C113.8,203.3 114.7,192.7 113.0,190.0 Z M88.0,210.0 C89.0,205.7 96.3,205.0 98.0,210.0 C99.7,215.0 99.0,235.7 98.0,240.0 C97.0,244.3 93.7,241.0 92.0,236.0 C90.3,231.0 87.0,214.3 88.0,210.0 Z M112.0,210.0 C111.0,205.7 103.7,205.0 102.0,210.0 C100.3,215.0 101.0,235.7 102.0,240.0 C103.0,244.3 106.3,241.0 108.0,236.0 C109.7,231.0 113.0,214.3 112.0,210.0 Z","obliques":"M84.0,150.0 C81.8,143.5 73.8,147.3 71.0,151.0 C68.2,154.7 67.3,164.5 67.0,172.0 C66.7,179.5 68.0,189.3 69.0,196.0 C70.0,202.7 70.5,207.7 73.0,212.0 C75.5,216.3 82.2,225.7 84.0,222.0 C85.8,218.3 84.0,202.0 84.0,190.0 C84.0,178.0 86.2,156.5 84.0,150.0 Z M116.0,150.0 C118.2,143.5 126.2,147.3 129.0,151.0 C131.8,154.7 132.7,164.5 133.0,172.0 C133.3,179.5 132.0,189.3 131.0,196.0 C130.0,202.7 129.5,207.7 127.0,212.0 C124.5,216.3 117.8,225.7 116.0,222.0 C114.2,218.3 116.0,202.0 116.0,190.0 C116.0,178.0 113.8,156.5 116.0,150.0 Z","quads":"M62.0,256.0 C60.5,262.0 59.0,279.0 59.0,290.0 C59.0,301.0 60.2,314.0 62.0,322.0 C63.8,330.0 67.5,336.2 70.0,338.0 C72.5,339.8 75.5,339.3 77.0,333.0 C78.5,326.7 79.3,311.2 79.0,300.0 C78.7,288.8 76.8,273.7 75.0,266.0 C73.2,258.3 70.2,255.7 68.0,254.0 C65.8,252.3 63.5,250.0 62.0,256.0 Z M138.0,256.0 C139.5,262.0 141.0,279.0 141.0,290.0 C141.0,301.0 139.8,314.0 138.0,322.0 C136.2,330.0 132.5,336.2 130.0,338.0 C127.5,339.8 124.5,339.3 123.0,333.0 C121.5,326.7 120.7,311.2 121.0,300.0 C121.3,288.8 123.2,273.7 125.0,266.0 C126.8,258.3 129.8,255.7 132.0,254.0 C134.2,252.3 136.5,250.0 138.0,256.0 Z M80.0,262.0 C79.0,267.3 80.3,282.7 81.0,290.0 C81.7,297.3 82.7,306.0 84.0,306.0 C85.3,306.0 87.8,296.3 89.0,290.0 C90.2,283.7 91.3,273.3 91.0,268.0 C90.7,262.7 88.8,259.0 87.0,258.0 C85.2,257.0 81.0,256.7 80.0,262.0 Z M120.0,262.0 C121.0,267.3 119.7,282.7 119.0,290.0 C118.3,297.3 117.3,306.0 116.0,306.0 C114.7,306.0 112.2,296.3 111.0,290.0 C109.8,283.7 108.7,273.3 109.0,268.0 C109.3,262.7 111.2,259.0 113.0,258.0 C114.8,257.0 119.0,256.7 120.0,262.0 Z M87.0,312.0 C85.5,314.7 84.2,321.3 84.0,326.0 C83.8,330.7 84.5,338.0 86.0,340.0 C87.5,342.0 91.5,341.0 93.0,338.0 C94.5,335.0 95.0,326.7 95.0,322.0 C95.0,317.3 94.3,311.7 93.0,310.0 C91.7,308.3 88.5,309.3 87.0,312.0 Z M113.0,312.0 C114.5,314.7 115.8,321.3 116.0,326.0 C116.2,330.7 115.5,338.0 114.0,340.0 C112.5,342.0 108.5,341.0 107.0,338.0 C105.5,335.0 105.0,326.7 105.0,322.0 C105.0,317.3 105.7,311.7 107.0,310.0 C108.3,308.3 111.5,309.3 113.0,312.0 Z","calves":"M64.0,358.0 C62.3,361.7 61.7,371.3 62.0,378.0 C62.3,384.7 64.3,395.0 66.0,398.0 C67.7,401.0 70.7,400.0 72.0,396.0 C73.3,392.0 74.0,380.7 74.0,374.0 C74.0,367.3 73.7,358.7 72.0,356.0 C70.3,353.3 65.7,354.3 64.0,358.0 Z M136.0,358.0 C137.7,361.7 138.3,371.3 138.0,378.0 C137.7,384.7 135.7,395.0 134.0,398.0 C132.3,401.0 129.3,400.0 128.0,396.0 C126.7,392.0 126.0,380.7 126.0,374.0 C126.0,367.3 126.3,358.7 128.0,356.0 C129.7,353.3 134.3,354.3 136.0,358.0 Z M88.0,360.0 C86.7,361.0 84.3,373.7 84.0,380.0 C83.7,386.3 85.0,395.3 86.0,398.0 C87.0,400.7 89.0,400.0 90.0,396.0 C91.0,392.0 92.3,380.0 92.0,374.0 C91.7,368.0 89.3,359.0 88.0,360.0 Z M112.0,360.0 C113.3,361.0 115.7,373.7 116.0,380.0 C116.3,386.3 115.0,395.3 114.0,398.0 C113.0,400.7 111.0,400.0 110.0,396.0 C109.0,392.0 107.7,380.0 108.0,374.0 C108.3,368.0 110.7,359.0 112.0,360.0 Z"},"back":{"traps":"M100.0,66.0 C98.7,55.7 96.7,66.7 92.0,70.0 C87.3,73.3 73.0,81.3 72.0,86.0 C71.0,90.7 82.2,93.0 86.0,98.0 C89.8,103.0 92.7,110.3 95.0,116.0 C97.3,121.7 99.2,140.3 100.0,132.0 C100.8,123.7 101.3,76.3 100.0,66.0 Z M100.0,66.0 C101.3,55.7 103.3,66.7 108.0,70.0 C112.7,73.3 127.0,81.3 128.0,86.0 C129.0,90.7 117.8,93.0 114.0,98.0 C110.2,103.0 107.3,110.3 105.0,116.0 C102.7,121.7 100.8,140.3 100.0,132.0 C99.2,123.7 98.7,76.3 100.0,66.0 Z","delts_rear":"M52.0,92.0 C47.8,92.3 42.2,95.7 39.0,100.0 C35.8,104.3 33.5,112.3 33.0,118.0 C32.5,123.7 33.8,132.0 36.0,134.0 C38.2,136.0 42.7,133.7 46.0,130.0 C49.3,126.3 53.0,117.3 56.0,112.0 C59.0,106.7 64.7,101.3 64.0,98.0 C63.3,94.7 56.2,91.7 52.0,92.0 Z M148.0,92.0 C152.2,92.3 157.8,95.7 161.0,100.0 C164.2,104.3 166.5,112.3 167.0,118.0 C167.5,123.7 166.2,132.0 164.0,134.0 C161.8,136.0 157.3,133.7 154.0,130.0 C150.7,126.3 147.0,117.3 144.0,112.0 C141.0,106.7 135.3,101.3 136.0,98.0 C136.7,94.7 143.8,91.7 148.0,92.0 Z","upper_back":"M88.0,102.0 C83.5,99.3 72.5,98.2 68.0,100.0 C63.5,101.8 61.2,108.3 61.0,113.0 C60.8,117.7 63.3,126.2 67.0,128.0 C70.7,129.8 78.3,126.0 83.0,124.0 C87.7,122.0 94.2,119.7 95.0,116.0 C95.8,112.3 92.5,104.7 88.0,102.0 Z M112.0,102.0 C116.5,99.3 127.5,98.2 132.0,100.0 C136.5,101.8 138.8,108.3 139.0,113.0 C139.2,117.7 136.7,126.2 133.0,128.0 C129.3,129.8 121.7,126.0 117.0,124.0 C112.3,122.0 105.8,119.7 105.0,116.0 C104.2,112.3 107.5,104.7 112.0,102.0 Z","lats":"M63.0,130.0 C61.5,133.0 60.7,144.3 61.0,152.0 C61.3,159.7 63.0,168.7 65.0,176.0 C67.0,183.3 69.3,191.0 73.0,196.0 C76.7,201.0 83.8,207.0 87.0,206.0 C90.2,205.0 92.5,197.7 92.0,190.0 C91.5,182.3 87.7,169.3 84.0,160.0 C80.3,150.7 73.5,139.0 70.0,134.0 C66.5,129.0 64.5,127.0 63.0,130.0 Z M137.0,130.0 C138.5,133.0 139.3,144.3 139.0,152.0 C138.7,159.7 137.0,168.7 135.0,176.0 C133.0,183.3 130.7,191.0 127.0,196.0 C123.3,201.0 116.2,207.0 113.0,206.0 C109.8,205.0 107.5,197.7 108.0,190.0 C108.5,182.3 112.3,169.3 116.0,160.0 C119.7,150.7 126.5,139.0 130.0,134.0 C133.5,129.0 135.5,127.0 137.0,130.0 Z","lower_back":"M98.0,168.0 C96.7,158.3 91.7,164.7 90.0,170.0 C88.3,175.3 88.0,191.3 88.0,200.0 C88.0,208.7 88.3,217.3 90.0,222.0 C91.7,226.7 96.7,237.0 98.0,228.0 C99.3,219.0 99.3,177.7 98.0,168.0 Z M102.0,168.0 C103.3,158.3 108.3,164.7 110.0,170.0 C111.7,175.3 112.0,191.3 112.0,200.0 C112.0,208.7 111.7,217.3 110.0,222.0 C108.3,226.7 103.3,237.0 102.0,228.0 C100.7,219.0 100.7,177.7 102.0,168.0 Z","triceps":"M41.0,138.0 C39.0,140.5 37.7,146.3 37.0,152.0 C36.3,157.7 36.3,166.3 37.0,172.0 C37.7,177.7 39.2,184.0 41.0,186.0 C42.8,188.0 46.2,187.7 48.0,184.0 C49.8,180.3 51.0,170.0 52.0,164.0 C53.0,158.0 54.5,152.5 54.0,148.0 C53.5,143.5 51.2,138.7 49.0,137.0 C46.8,135.3 43.0,135.5 41.0,138.0 Z M159.0,138.0 C161.0,140.5 162.3,146.3 163.0,152.0 C163.7,157.7 163.7,166.3 163.0,172.0 C162.3,177.7 160.8,184.0 159.0,186.0 C157.2,188.0 153.8,187.7 152.0,184.0 C150.2,180.3 149.0,170.0 148.0,164.0 C147.0,158.0 145.5,152.5 146.0,148.0 C146.5,143.5 148.8,138.7 151.0,137.0 C153.2,135.3 157.0,135.5 159.0,138.0 Z","forearms":"M40.0,193.0 C37.7,194.8 34.8,200.5 33.0,206.0 C31.2,211.5 29.7,219.7 29.0,226.0 C28.3,232.3 28.2,240.7 29.0,244.0 C29.8,247.3 32.2,248.7 34.0,246.0 C35.8,243.3 38.2,234.2 40.0,228.0 C41.8,221.8 43.8,214.5 45.0,209.0 C46.2,203.5 47.8,197.7 47.0,195.0 C46.2,192.3 42.3,191.2 40.0,193.0 Z M160.0,193.0 C162.3,194.8 165.2,200.5 167.0,206.0 C168.8,211.5 170.3,219.7 171.0,226.0 C171.7,232.3 171.8,240.7 171.0,244.0 C170.2,247.3 167.8,248.7 166.0,246.0 C164.2,243.3 161.8,234.2 160.0,228.0 C158.2,221.8 156.2,214.5 155.0,209.0 C153.8,203.5 152.2,197.7 153.0,195.0 C153.8,192.3 157.7,191.2 160.0,193.0 Z","glutes":"M98.0,232.0 C95.0,225.3 85.5,228.7 80.0,230.0 C74.5,231.3 68.2,235.3 65.0,240.0 C61.8,244.7 60.7,252.3 61.0,258.0 C61.3,263.7 63.2,270.5 67.0,274.0 C70.8,277.5 78.8,279.7 84.0,279.0 C89.2,278.3 95.7,277.8 98.0,270.0 C100.3,262.2 101.0,238.7 98.0,232.0 Z M102.0,232.0 C105.0,225.3 114.5,228.7 120.0,230.0 C125.5,231.3 131.8,235.3 135.0,240.0 C138.2,244.7 139.3,252.3 139.0,258.0 C138.7,263.7 136.8,270.5 133.0,274.0 C129.2,277.5 121.2,279.7 116.0,279.0 C110.8,278.3 104.3,277.8 102.0,270.0 C99.7,262.2 99.0,238.7 102.0,232.0 Z","hamstrings":"M63.0,284.0 C60.3,288.0 60.8,301.7 61.0,310.0 C61.2,318.3 62.2,328.7 64.0,334.0 C65.8,339.3 69.5,341.7 72.0,342.0 C74.5,342.3 77.7,342.0 79.0,336.0 C80.3,330.0 80.3,314.3 80.0,306.0 C79.7,297.7 79.8,289.7 77.0,286.0 C74.2,282.3 65.7,280.0 63.0,284.0 Z M137.0,284.0 C139.7,288.0 139.2,301.7 139.0,310.0 C138.8,318.3 137.8,328.7 136.0,334.0 C134.2,339.3 130.5,341.7 128.0,342.0 C125.5,342.3 122.3,342.0 121.0,336.0 C119.7,330.0 119.7,314.3 120.0,306.0 C120.3,297.7 120.2,289.7 123.0,286.0 C125.8,282.3 134.3,280.0 137.0,284.0 Z M84.0,288.0 C82.3,293.0 83.3,307.7 84.0,316.0 C84.7,324.3 86.3,334.7 88.0,338.0 C89.7,341.3 92.7,341.3 94.0,336.0 C95.3,330.7 96.0,314.3 96.0,306.0 C96.0,297.7 96.0,289.0 94.0,286.0 C92.0,283.0 85.7,283.0 84.0,288.0 Z M116.0,288.0 C117.7,293.0 116.7,307.7 116.0,316.0 C115.3,324.3 113.7,334.7 112.0,338.0 C110.3,341.3 107.3,341.3 106.0,336.0 C104.7,330.7 104.0,314.3 104.0,306.0 C104.0,297.7 104.0,289.0 106.0,286.0 C108.0,283.0 114.3,283.0 116.0,288.0 Z","calves":"M64.0,352.0 C61.0,354.3 60.0,365.3 60.0,372.0 C60.0,378.7 62.0,388.0 64.0,392.0 C66.0,396.0 69.7,398.3 72.0,396.0 C74.3,393.7 77.0,384.3 78.0,378.0 C79.0,371.7 80.3,362.3 78.0,358.0 C75.7,353.7 67.0,349.7 64.0,352.0 Z M136.0,352.0 C139.0,354.3 140.0,365.3 140.0,372.0 C140.0,378.7 138.0,388.0 136.0,392.0 C134.0,396.0 130.3,398.3 128.0,396.0 C125.7,393.7 123.0,384.3 122.0,378.0 C121.0,371.7 119.7,362.3 122.0,358.0 C124.3,353.7 133.0,349.7 136.0,352.0 Z M82.0,356.0 C80.3,360.0 81.3,371.7 82.0,378.0 C82.7,384.3 84.3,391.7 86.0,394.0 C87.7,396.3 90.7,395.7 92.0,392.0 C93.3,388.3 94.0,378.3 94.0,372.0 C94.0,365.7 94.0,356.7 92.0,354.0 C90.0,351.3 83.7,352.0 82.0,356.0 Z M118.0,356.0 C119.7,360.0 118.7,371.7 118.0,378.0 C117.3,384.3 115.7,391.7 114.0,394.0 C112.3,396.3 109.3,395.7 108.0,392.0 C106.7,388.3 106.0,378.3 106.0,372.0 C106.0,365.7 106.0,356.7 108.0,354.0 C110.0,351.3 116.3,352.0 118.0,356.0 Z"}};
+  const MGROUPS = [["chest","Chest","front",["chest"]],["back","Back","back",["lats","upper_back","lower_back","traps"]],
+    ["shoulders","Shoulders","front",["delts_front","delts_side","delts_rear"]],["arms","Arms","front",["biceps","triceps","forearms"]],
+    ["legs","Legs","front",["quads","hamstrings","glutes","calves"]],["core","Core","front",["abs","obliques"]]];
+  function anatThumb(view, lit){
+    const parts=Object.entries(ANAT[view]).map(([m,d])=>`<path d="${d}" class="${lit.includes(m)?"an-on":"an-off"}"/>`).join("");
+    return `<svg viewBox="0 -2 200 440" aria-hidden="true"><path d="${ANAT.sil}" class="an-sil"/><ellipse cx="100" cy="36" rx="20" ry="25" class="an-sil"/>${parts}</svg>`;
+  }
+  // which workouts each planned exercise appears in
+  const IN_WORKOUT = (()=>{ const o={}; Object.values(W).forEach(w=>w.ex.forEach(([id])=>{ (o[id]=o[id]||new Set()).add(w.t); }));
+    Object.entries(SWAP).forEach(([from,[to]])=>{ (o[to]=o[to]||new Set()); (o[from]||[]).forEach(t=>o[to].add(t+" (weeks 9–12)")); });
+    return Object.fromEntries(Object.entries(o).map(([k,v])=>[k,[...v]])); })();
+  let mgSel=null;
+  function renderPicker(){
+    const box=$("mgroups"); box.innerHTML="";
+    MGROUPS.forEach(([key,label,view,ms])=>{
+      const b=document.createElement("button"); b.type="button"; b.className="mg"; b.setAttribute("aria-pressed", mgSel===key?"true":"false");
+      b.innerHTML=anatThumb(view, ms)+"<span></span>"; b.lastChild.textContent=label;
+      b.onclick=()=>{ mgSel = mgSel===key ? null : key; tap(); renderPicker(); };
+      box.append(b);
+    });
+    const list=$("mlist"); list.innerHTML="";
+    const g=MGROUPS.find(x=>x[0]===mgSel);
+    if(!g){ list.innerHTML='<div class="empty">Tap a muscle group to see every exercise in your plan that works it.</div>'; return; }
+    const ms=g[3], hit=arr=>arr.some(m=>ms.includes(m));
+    const planned=Object.keys(EX).filter(id=>MUS[id] && (hit(MUS[id][0])||hit(MUS[id][1])))
+      .sort((a,b)=>(hit(MUS[b][0])-hit(MUS[a][0])) || EX[a][0].localeCompare(EX[b][0]));
+    planned.forEach(id=>{
+      const it=document.createElement("div"); it.className="mitem";
+      const main=hit(MUS[id][0]);
+      const t=document.createElement("div"); t.className="t";
+      t.innerHTML='<b></b><span class="mrole'+(main?"":" s")+'">'+(main?"Main muscle":"Helper")+'</span>';
+      t.firstChild.textContent=EX[id][0];
+      const inn=document.createElement("div"); inn.className="in"; inn.textContent = IN_WORKOUT[id] ? "In: "+IN_WORKOUT[id].join(" · ") : "Alternative / phase 3 swap";
+      it.append(t, inn, stars(EX[id][0]));
+      const dw=drawingCard(EX[id][0], id, MUS[id]); if(dw) it.append(dw);
+      list.append(it);
+    });
+    // alternatives that work this group as a main muscle
+    const seen=new Set(Object.values(EX).map(e=>e[0])), alts=[];
+    Object.entries(ALT).forEach(([id,names])=>names.forEach(n=>{ if(seen.has(n)) return; const mm=MUS_ALT[n]||MUS[NAME2POSE[n]]||MUS[id]; if(mm && hit(mm[0])){ seen.add(n); alts.push([n,id]); } }));
+    if (alts.length){
+      const wrap=document.createElement("div"); wrap.className="malt";
+      const h=document.createElement("div"); h.className="altshd"; h.textContent="Also in your alternatives"; wrap.append(h);
+      alts.sort((a,b)=>a[0].localeCompare(b[0])).forEach(([n,id])=>{
+        const r=document.createElement("div"); r.className="row2";
+        const l=document.createElement("div"); l.innerHTML="<span></span><div class='in'></div>"; l.firstChild.textContent=n; l.lastChild.textContent="Instead of "+EX[id][0];
+        r.append(l, stars(n)); wrap.append(r);
+      });
+      list.append(wrap);
+    }
+  }
   function renderPlan(){
+    renderPicker();
     buildWeeks();
     const w=planWeek, k=phaseOf(w);
     const ws=addDays(iso(START),(w-1)*7);
