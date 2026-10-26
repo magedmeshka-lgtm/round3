@@ -327,7 +327,7 @@ nav.tabs button[aria-selected="true"]{color:var(--hot);background:var(--soft)}
       </div>
       <div class="modes" id="woModes" role="group" aria-label="What are you doing this day">
         <button type="button" data-mode="exercise"><b>Exercise</b><small></small></button>
-        <button type="button" data-mode="walk"><b>Walk</b><small></small></button>
+        <button type="button" data-mode="walk"><b>Walk / Swim</b><small></small></button>
         <button type="button" data-mode="rest"><b>Rest</b><small></small></button>
       </div>
       <label id="woPickRow" hidden>Workout<select id="woPick"></select></label>
@@ -894,7 +894,7 @@ nav.tabs button[aria-selected="true"]{color:var(--hot);background:var(--soft)}
 
   function renderToday(){
     if (tp.week>0 && tp.week<=12){ const wo=dayWorkout(TODAY), md=dayMode(TODAY);
-      $("planTitle").textContent = wo ? wo.title+" — gym" : (md==="walk" ? "Walk day — no gym" : (today.getDay()===5 ? "Day off" : "Rest day")); }
+      $("planTitle").textContent = wo ? wo.title+" — gym" : (md==="walk" ? ((rows[TODAY]&&rows[TODAY].act==="swim") ? "Swim day — no gym" : "Walk day — no gym") : (today.getDay()===5 ? "Day off" : "Rest day")); }
     const ft=dayType(TODAY); const tgt=KCAL[ft]; const t=totals(TODAY);
     $("mTgt").textContent=fmt(tgt); $("mKcal").textContent=fmt(t.kcal);
     $("mKcalB").style.width=Math.min(100,t.kcal/tgt*100)+"%"; $("mKcalB").style.background = t.kcal>tgt*1.05?"var(--warn)":"var(--good)";
@@ -1725,6 +1725,28 @@ nav.tabs button[aria-selected="true"]{color:var(--hot);background:var(--soft)}
     const body=$("woBody"); body.innerHTML="";
     const ph=$("woPhase");
     if (p.week>0 && p.week<=12){ const k=phaseOf(p.week); ph.hidden=false; ph.textContent="W"+p.week+" · "+PH[k][0]; ph.style.background=PH[k][1]; } else ph.hidden=true;
+    if (!wo && dayMode(d)==="walk" && p.week>0 && p.week<=12){
+      const swim = rows[d] && rows[d].act==="swim", r=rows[d]||{};
+      $("woH").textContent = swim ? "Swim day" : "Walk day";
+      const tg=document.createElement("div"); tg.className="modes"; tg.style.gridTemplateColumns="1fr 1fr";
+      [["walk","Walk"],["swim","Swim"]].forEach(([k,l])=>{ const b=document.createElement("button"); b.type="button"; b.innerHTML="<b></b><small></small>"; b.firstChild.textContent=l;
+        b.classList.toggle("on", (swim?"swim":"walk")===k); b.setAttribute("aria-pressed",(swim?"swim":"walk")===k?"true":"false");
+        b.onclick=()=>{ tap(); saveDayChoice(d,{act:k==="swim"?"swim":null}); }; tg.append(b); });
+      const info=document.createElement("div"); info.className="tip";
+      if (!swim){
+        info.textContent="Brisk 30–45 minute walk and reach "+fmt(p.target)+" steps. Splitting it is fine: 15 minutes after lunch and 15–20 after dinner.";
+        body.append(tg, info);
+      } else {
+        const wk=p.week, mins = wk<=4 ? "20–30" : wk<=8 ? "30–40" : "35–45";
+        info.innerHTML="<strong>Easy swim · "+mins+" min</strong> · any stroke, at a pace where you could still talk. Swim 2 lengths, rest 30–60 s at the wall, repeat. Start a <b>Pool Swim</b> workout on your Watch to count it. Swimming replaces the step target today; it's gentle on the knees and back.";
+        const g=document.createElement("div"); g.className="inputs"; g.style.gridTemplateColumns="1fr 1fr"; g.style.display="grid"; g.style.gap="8px";
+        const fld=(lab,key,max,step)=>{ const l=document.createElement("label"); l.textContent=lab; const i=document.createElement("input"); i.type="number"; i.inputMode="numeric"; i.min="0"; i.max=String(max); i.step=String(step); i.id="sw_"+key; i.value=r[key]??"";
+          i.onchange=()=>{ const v=i.value===""?null:Number(i.value); saveDayChoice(d,{[key]:v, trained: v?true:(r.trained??null)}); }; l.append(i); return l; };
+        g.append(fld("Minutes swum","swimMin",300,5), fld("Distance (m)","swimM",10000,25));
+        body.append(tg, info, g);
+      }
+      $("woSaveRow").hidden=true; $("woProg").hidden=true; return;
+    }
     if (!wo){
       const mode=dayMode(d);
       $("woH").textContent = mode==="walk" ? "Walk day" : "Rest day";
@@ -1834,7 +1856,7 @@ nav.tabs button[aria-selected="true"]{color:var(--hot);background:var(--soft)}
       const sum=document.createElement("summary");
       const dd=document.createElement("div"); dd.className="dd"; dd.innerHTML="<span></span><small></small>";
       dd.children[0].textContent=dt.toLocaleDateString("en-GB",{weekday:"short"}); dd.children[1].textContent=shortDate(d);
-      const lb=document.createElement("div"); lb.className="lb"; lb.textContent = wo ? wo.title : (mode==="walk" ? "Walk day" : (dt.getDay()===5 ? "Rest (Friday off)" : "Rest day"));
+      const lb=document.createElement("div"); lb.className="lb"; lb.textContent = wo ? wo.title : (mode==="walk" ? (r&&r.act==="swim" ? "Swim day" : "Walk day") : (dt.getDay()===5 ? "Rest (Friday off)" : "Rest day"));
       const sm=document.createElement("small"); sm.textContent = (wo ? wo.length : "Steps "+fmt(p.target))+" · food day "+dayType(d)+(chosen?" · your choice":""); lb.append(sm);
       const chip=document.createElement("span"); chip.className="st";
       if (r && r.trained===true){ chip.classList.add("done"); chip.textContent="✓ Done"; }
