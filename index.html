@@ -190,6 +190,10 @@ ol,ul{margin:6px 0 0;padding-left:20px} li{margin:3px 0}
 .pzovc .top{display:flex;justify-content:space-between;align-items:center;gap:10px}
 .pzovc h3{margin:0;font-family:var(--display);font-size:1.3rem;letter-spacing:.02em}
 .pzbig{max-width:420px;margin:0 auto}
+.modes{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}
+.modes button{display:flex;flex-direction:column;align-items:center;gap:1px;padding:9px 4px;border-radius:10px}
+.modes button b{font-size:.92rem}.modes button small{font-size:.66rem;font-weight:600;opacity:.75;min-height:1em;text-transform:uppercase;letter-spacing:.06em}
+.modes button.on{background:var(--hot);border-color:var(--hot);color:#fff}
 .wg{display:grid;grid-template-columns:auto 1fr;gap:6px 12px;font-size:.88rem;align-items:baseline}
 .wg b{font-family:var(--display);font-size:1rem;letter-spacing:.04em}
 .ex .last.up{color:var(--good);font-weight:600}
@@ -321,6 +325,12 @@ nav.tabs button[aria-selected="true"]{color:var(--hot);background:var(--soft)}
         <div class="row" style="justify-content:space-between"><span id="woProgTxt" class="num">0 of 0 sets</span><span class="clock"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="13" r="8"/><path d="M12 9v4l2.5 2M10 2h4"/></svg><span id="woClock" class="num">0:00</span></span></div>
         <div class="bar"><i id="woProgBar" style="width:0"></i></div>
       </div>
+      <div class="modes" id="woModes" role="group" aria-label="What are you doing this day">
+        <button type="button" data-mode="exercise"><b>Exercise</b><small></small></button>
+        <button type="button" data-mode="walk"><b>Walk</b><small></small></button>
+        <button type="button" data-mode="rest"><b>Rest</b><small></small></button>
+      </div>
+      <label id="woPickRow" hidden>Workout<select id="woPick"></select></label>
       <div id="woBody"><div class="empty">Your workout for the day appears here.</div></div>
       <div class="row" id="woSaveRow" hidden>
         <button type="button" class="primary" id="woSave">Save workout</button>
@@ -754,7 +764,11 @@ nav.tabs button[aria-selected="true"]{color:var(--hot);background:var(--soft)}
   });
 
   // ---------- food helpers
-  function dayType(d){ return (rows[d] && rows[d].food && rows[d].food[0]) || planFor(parse(d)).food; }
+  function dayType(d){
+    if (rows[d] && rows[d].food) return rows[d].food[0];
+    if (rows[d] && rows[d].mode){ return rows[d].mode==="exercise" ? "A" : (parse(d).getDay()===5 ? "D" : "B"); }
+    return planFor(parse(d)).food;
+  }
   function totals(d){
     const f = food[d]; let k=0,p=0;
     if (f && f.items) for (const it of f.items){ k+=+it.kcal||0; p+=+it.protein||0; }
@@ -879,6 +893,8 @@ nav.tabs button[aria-selected="true"]{color:var(--hot);background:var(--soft)}
   }
 
   function renderToday(){
+    if (tp.week>0 && tp.week<=12){ const wo=dayWorkout(TODAY), md=dayMode(TODAY);
+      $("planTitle").textContent = wo ? wo.title+" — gym" : (md==="walk" ? "Walk day — no gym" : (today.getDay()===5 ? "Day off" : "Rest day")); }
     const ft=dayType(TODAY); const tgt=KCAL[ft]; const t=totals(TODAY);
     $("mTgt").textContent=fmt(tgt); $("mKcal").textContent=fmt(t.kcal);
     $("mKcalB").style.width=Math.min(100,t.kcal/tgt*100)+"%"; $("mKcalB").style.background = t.kcal>tgt*1.05?"var(--warn)":"var(--good)";
@@ -938,6 +954,17 @@ nav.tabs button[aria-selected="true"]{color:var(--hot);background:var(--soft)}
   const PH = {1:["Foundation","var(--p1)"],2:["Build","var(--p2)"],3:["Burn","var(--p3)"]};
   const phaseOf = w => w<=4?1:w<=8?2:3;
 
+  // ---- what the day is: planned by the program, or chosen by you (Exercise / Walk / Rest)
+  const WK_CHOICES = week => week<=4 ? ["FA","FB","FC"] : ["U1","L1","U2","L2","FC"];
+  function workoutByKey(week, key){ for(let dw=0; dw<7; dw++){ const w=workoutFor(week,dw); if(w && w.key===key) return w; } return null; }
+  function plannedMode(d){ const dt=parse(d), p=planFor(dt); if (workoutFor(p.week, dt.getDay())) return "exercise"; return (dt.getDay()===5||dt.getDay()===2) ? "rest" : "walk"; }
+  function dayMode(d){ return (rows[d] && rows[d].mode) || plannedMode(d); }
+  function dayWorkout(d){
+    const dt=parse(d), p=planFor(dt); if (!p.week || p.week>12 || dayMode(d)!=="exercise") return null;
+    const planned=workoutFor(p.week, dt.getDay()), k=rows[d] && rows[d].wkey;
+    if (k && (!planned || planned.key!==k)) return workoutByKey(p.week, k) || planned;
+    return planned || workoutByKey(p.week, WK_CHOICES(p.week)[0]);
+  }
   function workoutFor(week, dow){
     if (!week || week>12) return null;
     const pairs = (ex, labs) => [0,2,4].filter(i=>ex[i]).map((i,k)=>({items:ex.slice(i,i+2), sets:labs[k]}));
@@ -1648,7 +1675,7 @@ nav.tabs button[aria-selected="true"]{color:var(--hot);background:var(--soft)}
   }
   function streak(){ // planned gym days in a row (backwards from the last one) that were trained
     let n=0, d=TODAY;
-    for(let i=0;i<60;i++){ const dt=parse(d); const p=planFor(dt); const wo=workoutFor(p.week, dt.getDay());
+    for(let i=0;i<60;i++){ const wo=dayWorkout(d);
       if (wo){ if (rows[d] && rows[d].trained) n++; else if (d<TODAY) break; }
       d=addDays(d,-1); if (d<iso(START)) break; }
     return n;
@@ -1663,19 +1690,48 @@ nav.tabs button[aria-selected="true"]{color:var(--hot);background:var(--soft)}
   }
   $("winClose").onclick=()=>{ $("win").hidden=true; };
 
+  function renderModes(d, p){
+    const active = p.week>0 && p.week<=12; $("woModes").hidden=!active; if(!active){ $("woPickRow").hidden=true; return; }
+    const pm=plannedMode(d), cur=dayMode(d);
+    $("woModes").querySelectorAll("button").forEach(b=>{ b.classList.toggle("on", b.dataset.mode===cur); b.querySelector("small").textContent = b.dataset.mode===pm ? "plan" : ""; b.setAttribute("aria-pressed", b.dataset.mode===cur?"true":"false"); });
+    const pick=$("woPick"); $("woPickRow").hidden = cur!=="exercise";
+    if (cur==="exercise"){
+      const planned=workoutFor(p.week, parse(d).getDay()), wo=dayWorkout(d);
+      pick.innerHTML=""; WK_CHOICES(p.week).forEach(k=>{ const w=workoutByKey(p.week,k); if(!w) return; const o=document.createElement("option"); o.value=k; o.textContent=w.title+(planned&&planned.key===k?" (plan)":""); pick.append(o); });
+      if (wo) pick.value=wo.key;
+    }
+  }
+  async function saveDayChoice(d, changes){
+    const p=planFor(parse(d)), body=Object.assign({}, rows[d]||{date:d}, changes, {date:d, updatedAt:new Date().toISOString()});
+    // back to the plan: drop the override so the program decides again
+    if (body.mode===plannedMode(d)) body.mode=null;
+    const planned=workoutFor(p.week, parse(d).getDay());
+    if (body.wkey && planned && planned.key===body.wkey) body.wkey=null;
+    if (body.mode && body.mode!=="exercise") body.wkey=null;
+    rows[d]=body;
+    renderWorkout(true); renderToday(); renderFood(); if(!$("p-plan").hidden) renderPlan();
+    if (!db) return;
+    try{ await db.collection("days").doc(d).set(body); $("wost").textContent="Saved."; }catch(e){ $("wost").textContent="Couldn't save just now. Check your connection."; }
+  }
+  $("woModes").querySelectorAll("button").forEach(b=> b.onclick=()=>{ tap(); saveDayChoice(woDate, {mode:b.dataset.mode}); });
+  $("woPick").onchange=()=>{ tap(); saveDayChoice(woDate, {mode:"exercise", wkey:$("woPick").value}); };
   let woRendered=null, woTouched=false;
   function renderWorkout(force){
     if (document.activeElement && $("woBody").contains(document.activeElement) && document.activeElement.tagName==="INPUT") return; // don't redraw while typing
     if (!force && woRendered===woDate && woTouched) return; // keep an in-progress session on screen
     woRendered=woDate; woTouched=false;
-    const d=woDate; $("wDate").value=d; const p=planFor(parse(d)); const wo=workoutFor(p.week, parse(d).getDay());
+    const d=woDate; $("wDate").value=d; const p=planFor(parse(d)); const wo=dayWorkout(d);
+    renderModes(d, p);
     const body=$("woBody"); body.innerHTML="";
     const ph=$("woPhase");
     if (p.week>0 && p.week<=12){ const k=phaseOf(p.week); ph.hidden=false; ph.textContent="W"+p.week+" · "+PH[k][0]; ph.style.background=PH[k][1]; } else ph.hidden=true;
     if (!wo){
-      $("woH").textContent = "Rest day";
+      const mode=dayMode(d);
+      $("woH").textContent = mode==="walk" ? "Walk day" : "Rest day";
       const e=document.createElement("div"); e.className="empty";
-      e.textContent = p.week>0&&p.week<=12 ? (parse(d).getDay()===5 ? "Friday: full day off. Enjoy your free meal." : "No gym today. Walk to your step target: "+fmt(p.target)+" steps.") : p.sub;
+      e.textContent = !(p.week>0&&p.week<=12) ? p.sub
+        : mode==="walk" ? "No gym today. Go for a brisk 30–45 minute walk and reach "+fmt(p.target)+" steps."
+        : (parse(d).getDay()===5 ? "Friday: full day off. Enjoy your free meal." : "Full rest. Easy stretching is fine; steps are optional today.");
       body.append(e); $("woSaveRow").hidden=true; $("woProg").hidden=true; return;
     }
     $("woH").textContent = wo.title;
@@ -1771,15 +1827,15 @@ nav.tabs button[aria-selected="true"]{color:var(--hot);background:var(--soft)}
     let sess=0, st=[], wt=[], kc=[];
     const list=$("pwDays"); list.innerHTML="";
     for(let i=0;i<7;i++){
-      const d=addDays(ws,i); const dt=parse(d); const p=planFor(dt); const wo=workoutFor(w, dt.getDay()); const r=rows[d];
+      const d=addDays(ws,i); const dt=parse(d); const p=planFor(dt); const wo=dayWorkout(d); const r=rows[d]; const mode=dayMode(d), chosen=!!(r&&(r.mode||r.wkey));
       if (r){ if(r.trained) sess++; if(r.steps) st.push(+r.steps); if(r.weight) wt.push(+r.weight); }
       const t=totals(d); if(t.n) kc.push(t.kcal);
       const det=document.createElement("details"); if (d===TODAY) det.open=true;
       const sum=document.createElement("summary");
       const dd=document.createElement("div"); dd.className="dd"; dd.innerHTML="<span></span><small></small>";
       dd.children[0].textContent=dt.toLocaleDateString("en-GB",{weekday:"short"}); dd.children[1].textContent=shortDate(d);
-      const lb=document.createElement("div"); lb.className="lb"; lb.textContent = wo ? wo.title : p.label;
-      const sm=document.createElement("small"); sm.textContent = wo ? wo.length+" · food day "+p.food : "Steps "+fmt(p.target)+" · food day "+p.food; lb.append(sm);
+      const lb=document.createElement("div"); lb.className="lb"; lb.textContent = wo ? wo.title : (mode==="walk" ? "Walk day" : (dt.getDay()===5 ? "Rest (Friday off)" : "Rest day"));
+      const sm=document.createElement("small"); sm.textContent = (wo ? wo.length : "Steps "+fmt(p.target))+" · food day "+dayType(d)+(chosen?" · your choice":""); lb.append(sm);
       const chip=document.createElement("span"); chip.className="st";
       if (r && r.trained===true){ chip.classList.add("done"); chip.textContent="✓ Done"; }
       else if (d===TODAY){ chip.classList.add("today"); chip.textContent="Today"; }
