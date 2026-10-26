@@ -156,13 +156,22 @@ ol,ul{margin:6px 0 0;padding-left:20px} li{margin:3px 0}
 .bkey .kp{background:var(--hot)} .bkey .ks{background:var(--warn);opacity:.6}
 .pzwrap{display:flex;flex-direction:column;gap:6px;width:100%}
 .pzsvg{width:100%;height:auto;display:block;background:var(--card);border-radius:10px}
-.pz-skin{stroke:var(--pzskin)}.pz-far{stroke:var(--pzfar)}.pz-line{stroke:var(--pzline)}
+.pz-skin{fill:var(--pzskin)}.pz-far{fill:var(--pzfar)}.pz-body{stroke:var(--pzline);stroke-width:1.1;stroke-linejoin:round}
 .pz-head{fill:var(--pzskin);stroke:var(--pzline);stroke-width:1.2}
-.pz-pri{stroke:var(--pzpri);fill:var(--pzpri)}.pz-sec{stroke:var(--pzsec);fill:var(--pzsec)}
+.pz-pri{fill:var(--pzpri);stroke:var(--pzpri);stroke-width:.6}.pz-sec{fill:var(--pzsec);stroke:var(--pzsec);stroke-width:.6}
 .pz-eq{stroke:var(--pzeq);fill:var(--pzeq)}.pz-eqd{stroke:var(--pzeqd);fill:var(--pzeqd)}rect.pz-eq,rect.pz-eqd{stroke:none}
 .pz-ball{fill:var(--pzball);stroke:var(--pzline);stroke-width:1.2}.pz-band{stroke:var(--good)}
 .pz-arrow{stroke:var(--hot);stroke-width:3}.pz-arrowhead{fill:var(--hot)}
 .pz-lbl{font-size:13px;font-weight:700;letter-spacing:2px;fill:var(--muted);font-family:var(--body)}
+.pz-lead{stroke:var(--muted);stroke-width:.9;fill:none}.pz-dot{fill:var(--fg)}
+.pz-tag{font-size:11.5px;fill:var(--fg);font-family:var(--body);font-weight:500;paint-order:stroke;stroke:var(--card);stroke-width:3px;stroke-linejoin:round}.pz-tagp{font-weight:700}
+.pzwrap{cursor:zoom-in}.pzhint{font-size:.74rem;color:var(--accent);font-weight:600}
+.pzov{position:fixed;inset:0;z-index:70;background:rgba(10,14,28,.6);display:flex;justify-content:center;align-items:flex-start;overflow-y:auto;
+  padding:calc(12px + env(safe-area-inset-top,0px)) max(12px,env(safe-area-inset-right,0px)) calc(12px + env(safe-area-inset-bottom,0px)) max(12px,env(safe-area-inset-left,0px))}
+.pzovc{background:var(--card);border-radius:16px;padding:14px;width:100%;max-width:460px;display:flex;flex-direction:column;gap:10px}
+.pzovc .top{display:flex;justify-content:space-between;align-items:center;gap:10px}
+.pzovc h3{margin:0;font-family:var(--display);font-size:1.3rem;letter-spacing:.02em}
+.pzbig{max-width:420px;margin:0 auto}
 .wg{display:grid;grid-template-columns:auto 1fr;gap:6px 12px;font-size:.88rem;align-items:baseline}
 .wg b{font-family:var(--display);font-size:1rem;letter-spacing:.04em}
 .ex .last.up{color:var(--good);font-weight:600}
@@ -522,6 +531,9 @@ nav.tabs button[aria-selected="true"]{color:var(--hot);background:var(--soft)}
   </section>
 </div>
 
+<div class="pzov" id="pzov" hidden role="dialog" aria-modal="true" aria-labelledby="pzt">
+  <div class="pzovc"><div class="top"><h3 id="pzt"></h3><button type="button" id="pzx">Close</button></div><div id="pzb"></div><div id="pzk" class="bkey"></div></div>
+</div>
 <div class="restbar" id="restBar" hidden role="timer" aria-live="polite">
   <svg viewBox="0 0 36 36" class="ring" aria-hidden="true"><circle cx="18" cy="18" r="15.9" pathLength="100" class="bg"/><circle cx="18" cy="18" r="15.9" pathLength="100" id="restRing" class="fg"/></svg>
   <div class="rt"><small>REST</small><b id="restTime" class="num">1:30</b><span id="restNext"></span></div>
@@ -1133,11 +1145,42 @@ nav.tabs button[aria-selected="true"]{color:var(--hot);background:var(--soft)}
     const C=(x,y,r,c)=>`<circle cx="${f1(x)}" cy="${f1(y)}" r="${r}" class="${c}"/>`;
     const DB=p=>C(p[0],p[1],8,"pz-eqd")+C(p[0],p[1],3,"pz-eq");
     const FLOOR=Ln(4,217,266,217,5,"pz-eq");
-    function seg(a,b,w,cls){ return ln(a,b,w+2.4,"pz-line")+ln(a,b,w,cls); }
-    function half(a,b,w,side,col){
-      const dx=b[0]-a[0], dy=b[1]-a[1], n=Math.hypot(dx,dy)||1, nx=dy/n*side, ny=-dx/n*side, o=w*0.24, k=w*0.15/n;
-      return ln([a[0]+nx*o+dx*k, a[1]+ny*o+dy*k],[b[0]+nx*o-dx*k, b[1]+ny*o-dy*k], f1(w*0.5), col);
+    // ---- muscular body parts: each limb is a shaped outline (front/back half-widths along its length)
+    // profiles: [t, anterior half-width, posterior half-width]; ant = side of the segment that faces forward
+    const PROF={
+      torso:{ant:-1, p:[[0,12,15],[.22,11,15],[.4,10.5,11],[.6,12.5,12],[.8,15.5,13.5],[.94,13,13],[1,10,11]]},
+      thigh:{ant:1,  p:[[0,12,14],[.3,12.8,12.5],[.65,10.5,10],[.9,8,7.5],[1,7,7]]},
+      shin: {ant:1,  p:[[0,6.5,7],[.25,6.2,9.5],[.5,5.5,7.5],[.8,4.3,4.8],[1,4,4]]},
+      uarm: {ant:1,  p:[[0,7.5,7.5],[.4,7.3,7.8],[.75,6,6.2],[1,5,5]]},
+      farm: {ant:1,  p:[[0,5.2,5.6],[.3,5.6,5],[.75,4,3.8],[1,3.4,3.4]]},
+      foot: {ant:1,  p:[[0,4.2,4.2],[1,3.2,3.2]]},
+      neck: {ant:-1, p:[[0,5.5,5.5],[1,5,5]]},
+    };
+    function widthAt(prof,t,i){ const p=prof.p; for(let k=1;k<p.length;k++){ if(t<=p[k][0]){ const a=p[k-1], b=p[k], u=(t-a[0])/((b[0]-a[0])||1); return a[i]+(b[i]-a[i])*u; } } return p[p.length-1][i]; }
+    function frame(a,b){ const dx=b[0]-a[0], dy=b[1]-a[1], n=Math.hypot(dx,dy)||1; return {dx,dy,n, nx:dy/n, ny:-dx/n}; }
+    // point on the segment at t, pushed sideways: side +1/-1 relative to the left normal, amount in px
+    const at=(a,b,f,t,side,amt)=>[a[0]+f.dx*t+f.nx*side*amt, a[1]+f.dy*t+f.ny*side*amt];
+    function smooth(pts){ const n=pts.length; let d=`M${f1(pts[0][0])},${f1(pts[0][1])}`;
+      for(let i=0;i<n;i++){ const p0=pts[(i-1+n)%n], p1=pts[i], p2=pts[(i+1)%n], p3=pts[(i+2)%n];
+        d+=` C${f1(p1[0]+(p2[0]-p0[0])/6)},${f1(p1[1]+(p2[1]-p0[1])/6)} ${f1(p2[0]-(p3[0]-p1[0])/6)},${f1(p2[1]-(p3[1]-p1[1])/6)} ${f1(p2[0])},${f1(p2[1])}`; }
+      return d+"Z"; }
+    function limbShape(a,b,kind,cls){
+      const pr=PROF[kind], f=frame(a,b), S=pr.ant, side1=[], side2=[], N=9;
+      for(let i=0;i<=N;i++){ const t=i/N; side1.push(at(a,b,f,t, S, widthAt(pr,t,1))); side2.push(at(a,b,f,t,-S, widthAt(pr,t,2))); }
+      // round caps
+      const capA=at(a,b,f,-0.06,0,0), capB=at(a,b,f,1.06,0,0);
+      return `<path d="${smooth([capA,...side1,capB,...side2.reverse()])}" class="${cls} pz-body"/>`;
     }
+    // coloured muscle belly on one face of a limb (face: +1 front, -1 back) between t0..t1
+    function belly(a,b,kind,face,t0,t1,cls){
+      const pr=PROF[kind], f=frame(a,b), side=pr.ant*face, i=face>0?1:2, out=[], inn=[], N=7;
+      for(let k=0;k<=N;k++){ const t=t0+(t1-t0)*k/N, w=widthAt(pr,t,i); out.push(at(a,b,f,t,side,w*0.9)); inn.push(at(a,b,f,t,side,w*0.08)); }
+      const tm=(t0+t1)/2, anchor=at(a,b,f,tm,side,widthAt(pr,tm,i)*0.55);
+      return {svg:`<path d="${smooth([...out,...inn.reverse()])}" class="${cls}"/>`, anchor};
+    }
+    const NAMES={quads:"Quadriceps",glutes:"Gluteus maximus",hamstrings:"Hamstrings",calves:"Calves",chest:"Pectoralis major",
+      delts_front:"Front deltoid",delts_side:"Side deltoid",delts_rear:"Rear deltoid",triceps:"Triceps",biceps:"Biceps",forearms:"Forearms",
+      abs:"Rectus abdominis",obliques:"Obliques",lats:"Latissimus dorsi",upper_back:"Rhomboids",traps:"Trapezius",lower_back:"Erector spinae"};
     function limbLeg(hip, lg){
       let th=lg.thigh, sh=lg.shin;
       if (lg.ankle){ [th,sh]=ik(hip, lg.ankle, L.thigh, L.shin, lg.bend??-1); }
@@ -1150,39 +1193,59 @@ nav.tabs button[aria-selected="true"]{color:var(--hot);background:var(--soft)}
       const el=P(sh,L.uarm*k,ua), wr=P(el,L.farm*k,fa);
       return {el,wr};
     }
-    // one figure; mus = {name: "pz-pri"|"pz-sec"}
+    // one figure; mus = {name: "pz-pri"|"pz-sec"}; returns svg, joints and label anchors
     function figure(st, mus){
       const hip=st.hip, sh0=P(hip,L.torso,st.torso), sh=[sh0[0], sh0[1]-(st.shrug||0)];
       const nk=P(sh,L.neck,st.torso), hd=P(nk,L.head,st.torso);
       const legs=[st.legs[0], st.legs[1]||st.legs[0]].map(lg=>limbLeg(hip,lg));
       const arms=[st.arms[0], st.arms[1]||st.arms[0]].map(am=>limbArm(sh,am));
-      const m=k=>mus[k];
-      const out=[];
+      const m=k=>mus[k], out=[], anchors={};
+      const add=(k,b)=>{ out.push(b.svg); if(!anchors[k]) anchors[k]=b.anchor; };
       const leg=(j,far)=>{ const s=far?"pz-far":"pz-skin";
-        out.push(seg(hip,j.kn,W.thigh,s), seg(j.kn,j.an,W.shin,s), seg(j.an,j.ft,W.foot,s));
-        if (m("quads")) out.push(half(hip,j.kn,W.thigh,1,m("quads")));
-        if (m("hamstrings")) out.push(half(hip,j.kn,W.thigh,-1,m("hamstrings")));
-        if (m("calves")) out.push(half(j.kn,j.an,W.shin,-1,m("calves")));
+        out.push(limbShape(hip,j.kn,"thigh",s), limbShape(j.an,j.ft,"foot",s), limbShape(j.kn,j.an,"shin",s));
+        if (m("quads")) add("quads",belly(hip,j.kn,"thigh",1,.12,.86,m("quads")));
+        if (m("hamstrings")) add("hamstrings",belly(hip,j.kn,"thigh",-1,.14,.84,m("hamstrings")));
+        if (m("calves")) add("calves",belly(j.kn,j.an,"shin",-1,.08,.62,m("calves")));
       };
       const arm=(j,far)=>{ const s=far?"pz-far":"pz-skin";
-        out.push(seg(sh,j.el,W.uarm,s), seg(j.el,j.wr,W.farm,s));
-        if (m("biceps")) out.push(half(sh,j.el,W.uarm,1,m("biceps")));
-        if (m("triceps")) out.push(half(sh,j.el,W.uarm,-1,m("triceps")));
-        if (m("forearms")) out.push(half(j.el,j.wr,W.farm,1,m("forearms")));
+        out.push(limbShape(j.el,j.wr,"farm",s), limbShape(sh,j.el,"uarm",s));
+        if (m("biceps")) add("biceps",belly(sh,j.el,"uarm",1,.18,.86,m("biceps")));
+        if (m("triceps")) add("triceps",belly(sh,j.el,"uarm",-1,.12,.86,m("triceps")));
+        if (m("forearms")) add("forearms",belly(j.el,j.wr,"farm",1,.06,.66,m("forearms")));
       };
+      // far side first, then torso, near leg, near arm
       leg(legs[1],true); arm(arms[1],true);
-      out.push(seg(hip,sh,W.torso,"pz-skin"), seg(sh,nk,W.neck,"pz-skin"));
-      const along=(f)=>[hip[0]+(sh[0]-hip[0])*f, hip[1]+(sh[1]-hip[1])*f];
-      [["abs",.06,.55,-1],["obliques",.2,.6,-1],["chest",.62,.95,-1],["lower_back",.06,.45,1],["lats",.42,.82,1],["upper_back",.72,.98,1]]
-        .forEach(([k,a,b,side])=>{ if(m(k)) out.push(half(along(a),along(b),W.torso,side,m(k))); });
-      if (m("glutes")){ const dx=sh[0]-hip[0], dy=sh[1]-hip[1], n=Math.hypot(dx,dy); out.push(`<circle cx="${f1(hip[0]+dy/n*7)}" cy="${f1(hip[1]-dx/n*7)}" r="9" class="${m("glutes")}"/>`); }
+      out.push(limbShape(sh,nk,"neck","pz-skin"), limbShape(hip,sh,"torso","pz-skin"));
+      [["abs",1,.08,.56],["obliques",1,.2,.6],["chest",1,.62,.94],["glutes",-1,0,.22],["lower_back",-1,.24,.52],["lats",-1,.5,.82],["upper_back",-1,.8,.98]]
+        .forEach(([k,face,a,b])=>{ if(m(k)) add(k,belly(hip,sh,"torso",face,a,b,m(k))); });
+      if (m("traps")) add("traps",belly(sh,nk,"neck",-1,-.1,1,m("traps")));
       leg(legs[0],false);
-      if (m("traps")) out.push(ln(sh,nk,7,m("traps")));
+      // shoulder cap (deltoid) and joints
+      const delt=["delts_front","delts_side","delts_rear"].find(m);
       arm(arms[0],false);
-      const delt=["delts_front","delts_side","delts_rear"].map(m).find(Boolean);
-      if (delt) out.push(`<circle cx="${f1(sh[0])}" cy="${f1(sh[1])}" r="7.5" class="${delt}"/>`);
+      out.push(`<circle cx="${f1(sh[0])}" cy="${f1(sh[1])}" r="8.6" class="${delt?m(delt):"pz-skin"} pz-body"/>`);
+      if (delt) anchors[delt]=sh;
       out.push(`<circle cx="${f1(hd[0])}" cy="${f1(hd[1])}" r="${L.head}" class="pz-head"/>`);
-      return {svg:out.join(""), j:{hip, sh, kn:legs[0].kn, an:legs[0].an, ft:legs[0].ft, el:arms[0].el, wr:arms[0].wr, wr2:arms[1].wr, an2:legs[1].an}};
+      return {svg:out.join(""), anchors, j:{hip, sh, kn:legs[0].kn, an:legs[0].an, ft:legs[0].ft, el:arms[0].el, wr:arms[0].wr, wr2:arms[1].wr, an2:legs[1].an}};
+    }
+    // muscle name labels with pointer lines, stacked down the left and right edges
+    function labels(anchors, mus){
+      const keys=Object.keys(anchors).sort((a,b)=>(mus[a]==="pz-pri"?0:1)-(mus[b]==="pz-pri"?0:1)).slice(0,6);
+      const cx = keys.reduce((s,k)=>s+anchors[k][0],0)/(keys.length||1);
+      const sides={L:[],R:[]};
+      keys.forEach(k=>{ const a=anchors[k]; (a[0]<cx || (a[0]===cx && sides.L.length<=sides.R.length) ? sides.L : sides.R).push({k,a,y:a[1]}); });
+      const out=[];
+      for(const s of ["L","R"]){
+        const list=sides[s].sort((p,q)=>p.y-q.y);
+        list.forEach((it,i)=>{ if(i && it.y<list[i-1].y+14) it.y=list[i-1].y+14; it.y=Math.max(-30,Math.min(206,it.y)); });
+        for(let i=list.length-2;i>=0;i--) if(list[i].y>list[i+1].y-14) list[i].y=list[i+1].y-14;
+        list.forEach(it=>{
+          const name=NAMES[it.k]||it.k, tw=name.length*6.2, x = s==="L" ? 2 : 268, ex = s==="L" ? x+tw+3 : x-tw-3;
+          out.push(`<path d="M${f1(ex)},${f1(it.y-3.5)} L${f1(it.a[0])},${f1(it.a[1])}" class="pz-lead"/><circle cx="${f1(it.a[0])}" cy="${f1(it.a[1])}" r="1.8" class="pz-dot"/>`);
+          out.push(`<text x="${x}" y="${f1(it.y)}" text-anchor="${s==="L"?"start":"end"}" class="pz-tag ${mus[it.k]==="pz-pri"?"pz-tagp":""}">${name}</text>`);
+        });
+      }
+      return out.join("");
     }
     // ---- poses
     const STAND={legs:[{thigh:90,shin:90,foot:0}]};
@@ -1290,18 +1353,22 @@ nav.tabs button[aria-selected="true"]{color:var(--hot);background:var(--soft)}
         states:[{thigh:-2,shin:92,foot:0},{thigh:-2,shin:-6,foot:-80}].map(lg=>({hip:[100,168], torso:-100, legs:[lg], arms:[{uarm:92,farm:20}],
           props:j=>{ const dx=j.an[0]-j.kn[0], dy=j.an[1]-j.kn[1], n=Math.hypot(dx,dy); return Ln(j.kn[0],j.kn[1],j.an[0]-dx/n*6,j.an[1]-dy/n*6,4,"pz-eq")+C(j.an[0]-dy/n*(-11)-dx/n*6, j.an[1]+dx/n*(-11)-dy/n*6, 8,"pz-eqd"); }}))},
     };
-    function panel(spec, st, mus, label, dx){
+    function panel(spec, st, mus, label, dx, dy, withLabels){
       const f=figure(st, mus);
       const props = st.props ? st.props(f.j) : "";
-      return `<g transform="translate(${dx},0)">${spec.eq}${props}${f.svg}${st.front?st.front(f.j):""}<text x="135" y="246" text-anchor="middle" class="pz-lbl">${label}</text></g>`;
+      return `<g transform="translate(${dx},${dy})">${spec.eq}${props}${f.svg}${st.front?st.front(f.j):""}${withLabels?labels(f.anchors,mus):""}<text x="135" y="246" text-anchor="middle" class="pz-lbl">${label}</text></g>`;
     }
-    function draw(id, pri, sec){
+    const ARROW_DEF='<defs><marker id="pzar" markerWidth="8" markerHeight="8" refX="5" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" class="pz-arrowhead"/></marker></defs>';
+    // small: start + finish side by side. big: stacked, finish panel with named muscles
+    function draw(id, pri, sec, big){
       const spec=POSES[id]; if(!spec) return null;
       const mus={}; (sec||[]).forEach(k=>mus[k]="pz-sec"); (pri||[]).forEach(k=>mus[k]="pz-pri");
-      if (spec.hold) return `<svg viewBox="-150 -40 570 292" role="img" class="pzsvg">${panel(spec,spec.states[0],mus,"HOLD",0)}</svg>`;
-      return `<svg viewBox="0 -40 570 292" role="img" class="pzsvg">${panel(spec,spec.states[0],mus,"START",0)}
-        <path d="M268 112 L292 112" class="pz-arrow" marker-end="url(#pzar)"/>${panel(spec,spec.states[1],mus,"FINISH",300)}
-        <defs><marker id="pzar" markerWidth="8" markerHeight="8" refX="5" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" class="pz-arrowhead"/></marker></defs></svg>`;
+      if (spec.hold) return big ? `<svg viewBox="0 -40 270 292" role="img" class="pzsvg pzbig">${panel(spec,spec.states[0],mus,"HOLD",0,0,true)}</svg>`
+                                : `<svg viewBox="-150 -40 570 292" role="img" class="pzsvg">${panel(spec,spec.states[0],mus,"HOLD",0,0,false)}</svg>`;
+      if (big) return `<svg viewBox="0 -40 270 590" role="img" class="pzsvg pzbig">${panel(spec,spec.states[0],mus,"START",0,0,false)}
+        <path d="M135 252 L135 270" class="pz-arrow" marker-end="url(#pzar)"/>${panel(spec,spec.states[1],mus,"FINISH",0,300,true)}${ARROW_DEF}</svg>`;
+      return `<svg viewBox="0 -40 570 292" role="img" class="pzsvg">${panel(spec,spec.states[0],mus,"START",0,0,false)}
+        <path d="M268 112 L292 112" class="pz-arrow" marker-end="url(#pzar)"/>${panel(spec,spec.states[1],mus,"FINISH",300,0,false)}${ARROW_DEF}</svg>`;
     }
     return {draw, has:id=>!!POSES[id]};
   })();
@@ -1328,7 +1395,11 @@ nav.tabs button[aria-selected="true"]{color:var(--hot);background:var(--soft)}
     pick.append(inp); box.append(pick);
     const pic = poseId && PZ.has(poseId) && muscles ? PZ.draw(poseId, muscles[0], muscles[1]) : null;
     if (pic){
-      const w=document.createElement("div"); w.className="pzwrap"; w.innerHTML=pic;
+      const w=document.createElement("div"); w.className="pzwrap"; w.innerHTML=pic; w.setAttribute("role","button"); w.tabIndex=0;
+      w.setAttribute("aria-label","Show "+name+" with muscle names");
+      const hint=document.createElement("div"); hint.className="pzhint"; hint.textContent="Tap the drawing to see the muscles by name"; w.append(hint);
+      const open=()=>{ $("pzt").textContent=name; $("pzb").innerHTML=PZ.draw(poseId, muscles[0], muscles[1], true); $("pzk").innerHTML=""; $("pzk").append(k.cloneNode(true)); $("pzov").hidden=false; tap(); };
+      w.onclick=open; w.onkeydown=e=>{ if(e.key==="Enter"||e.key===" "){ e.preventDefault(); open(); } };
       const k=document.createElement("div"); k.className="bkey";
       k.innerHTML='<span><i class="kp"></i></span>'+(muscles[1].length?'<span><i class="ks"></i></span>':'');
       k.children[0].append("Main: "+muscles[0].map(x=>MLABEL[x]).join(", "));
@@ -1782,6 +1853,8 @@ nav.tabs button[aria-selected="true"]{color:var(--hot);background:var(--soft)}
   })();
 
   // ---------- boot
+  $("pzx").onclick=()=>{ $("pzov").hidden=true; };
+  $("pzov").addEventListener("click", e=>{ if(e.target.id==="pzov") $("pzov").hidden=true; });
   // backup / restore / erase
   $("bkSave").onclick=async()=>{
     const store=await window.round3db; const data={app:"round3", version:1, savedAt:new Date().toISOString(), data:store.exportAll()};
