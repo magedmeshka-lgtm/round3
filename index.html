@@ -20,17 +20,17 @@ body{-webkit-tap-highlight-color:transparent;overscroll-behavior-y:none}</style>
 /* Layout: phone-first app — header, one active tab panel, fixed bottom tab bar (Today · Food · Progress · History) */
 :root{
   --bg:#F5F6F9; --card:#FFFFFF; --fg:#15203A; --muted:#5E6880; --line:#DCE1EA;
-  --accent:#1F3864; --hot:#C2332B; --good:#2F7D4F; --warn:#B7791F; --soft:#E8EDF6; --prot:#6B4FA0; --p1:#2E75B6; --p2:#548235; --p3:#C55A11; --link:#1F6FD1;
+  --accent:#1F3864; --hot:#C2332B; --good:#2F7D4F; --warn:#B7791F; --soft:#E8EDF6; --prot:#6B4FA0; --p1:#2E75B6; --p2:#548235; --p3:#C55A11; --link:#1F6FD1; --pzskin:#DCE1EA; --pzfar:#C4CBD7; --pzline:#8E9AAE; --pzeq:#B9C1CE; --pzeqd:#7D8798; --pzpri:#D63A30; --pzsec:#E9A94F; --pzball:#9FC3E8;
   --display:"Barlow Condensed","Arial Narrow",sans-serif;
   --body:"Barlow",system-ui,-apple-system,"Segoe UI",sans-serif;
   --mono:"JetBrains Mono",ui-monospace,Menlo,monospace;
 }
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
   --bg:#0E1424; --card:#161E33; --fg:#E8ECF5; --muted:#9AA4BC; --line:#2A3452;
-  --accent:#8FB1EE; --hot:#F0766C; --good:#5CC48A; --warn:#E3B358; --soft:#1E2944; --prot:#B9A0EA; --p1:#6FA8E0; --p2:#86B86A; --p3:#E8925A; --link:#7FB3FF; color-scheme:dark}}
+  --accent:#8FB1EE; --hot:#F0766C; --good:#5CC48A; --warn:#E3B358; --soft:#1E2944; --prot:#B9A0EA; --p1:#6FA8E0; --p2:#86B86A; --p3:#E8925A; --link:#7FB3FF; --pzskin:#3B4762; --pzfar:#2D374F; --pzline:#8390AC; --pzeq:#4C5874; --pzeqd:#8C98B4; --pzpri:#F0645A; --pzsec:#E9B266; --pzball:#4E77A3; color-scheme:dark}}
 :root[data-theme="dark"]{
   --bg:#0E1424; --card:#161E33; --fg:#E8ECF5; --muted:#9AA4BC; --line:#2A3452;
-  --accent:#8FB1EE; --hot:#F0766C; --good:#5CC48A; --warn:#E3B358; --soft:#1E2944; --prot:#B9A0EA; --p1:#6FA8E0; --p2:#86B86A; --p3:#E8925A; --link:#7FB3FF; color-scheme:dark}
+  --accent:#8FB1EE; --hot:#F0766C; --good:#5CC48A; --warn:#E3B358; --soft:#1E2944; --prot:#B9A0EA; --p1:#6FA8E0; --p2:#86B86A; --p3:#E8925A; --link:#7FB3FF; --pzskin:#3B4762; --pzfar:#2D374F; --pzline:#8390AC; --pzeq:#4C5874; --pzeqd:#8C98B4; --pzpri:#F0645A; --pzsec:#E9B266; --pzball:#4E77A3; color-scheme:dark}
 *{box-sizing:border-box}
 body{background:var(--bg);color:var(--fg);font-family:var(--body);font-size:15px;line-height:1.45;margin:0}
 .wrap{max-width:720px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:18px calc(96px + env(safe-area-inset-bottom,0px));display:flex;flex-direction:column;gap:16px}
@@ -154,6 +154,15 @@ ol,ul{margin:6px 0 0;padding-left:20px} li{margin:3px 0}
 .bkey span{display:flex;gap:6px;align-items:baseline}
 .bkey i{flex:0 0 9px;height:9px;border-radius:2px;display:inline-block}
 .bkey .kp{background:var(--hot)} .bkey .ks{background:var(--warn);opacity:.6}
+.pzwrap{display:flex;flex-direction:column;gap:6px;width:100%}
+.pzsvg{width:100%;height:auto;display:block;background:var(--card);border-radius:10px}
+.pz-skin{stroke:var(--pzskin)}.pz-far{stroke:var(--pzfar)}.pz-line{stroke:var(--pzline)}
+.pz-head{fill:var(--pzskin);stroke:var(--pzline);stroke-width:1.2}
+.pz-pri{stroke:var(--pzpri);fill:var(--pzpri)}.pz-sec{stroke:var(--pzsec);fill:var(--pzsec)}
+.pz-eq{stroke:var(--pzeq);fill:var(--pzeq)}.pz-eqd{stroke:var(--pzeqd);fill:var(--pzeqd)}rect.pz-eq,rect.pz-eqd{stroke:none}
+.pz-ball{fill:var(--pzball);stroke:var(--pzline);stroke-width:1.2}.pz-band{stroke:var(--good)}
+.pz-arrow{stroke:var(--hot);stroke-width:3}.pz-arrowhead{fill:var(--hot)}
+.pz-lbl{font-size:13px;font-weight:700;letter-spacing:2px;fill:var(--muted);font-family:var(--body)}
 .wg{display:grid;grid-template-columns:auto 1fr;gap:6px 12px;font-size:.88rem;align-items:baseline}
 .wg b{font-family:var(--display);font-size:1rem;letter-spacing:.04em}
 .ex .last.up{color:var(--good);font-weight:600}
@@ -1104,10 +1113,208 @@ nav.tabs button[aria-selected="true"]{color:var(--hot);background:var(--soft)}
   }
   // photos you send are stored in the "photos" collection: doc id = exercise key, {url}
   let photos = {};
+  // ---------- exercise drawings: a simple side-view figure in the start and finish position, worked muscles coloured
+  const PZ = (()=>{
+    const L={torso:64,neck:10,head:11,uarm:32,farm:30,thigh:46,shin:44,foot:15};
+    const W={torso:30,uarm:12,farm:10,thigh:21,shin:14,foot:8,neck:10};
+    const rad=a=>a*Math.PI/180, deg=r=>r*180/Math.PI;
+    const P=(a,l,ang)=>[a[0]+l*Math.cos(rad(ang)), a[1]+l*Math.sin(rad(ang))];
+    const f1=v=>Math.round(v*10)/10;
+    function ik(a,b,l1,l2,bend){
+      const dx=b[0]-a[0], dy=b[1]-a[1]; const d=Math.min(Math.hypot(dx,dy), l1+l2-0.01);
+      const base=Math.atan2(dy,dx); const c=(l1*l1+d*d-l2*l2)/(2*l1*d); const off=Math.acos(Math.max(-1,Math.min(1,c)));
+      const a1=base+bend*off; const k=[a[0]+l1*Math.cos(a1), a[1]+l1*Math.sin(a1)];
+      return [deg(a1), deg(Math.atan2(b[1]-k[1], b[0]-k[0]))];
+    }
+    // drawing helpers (class names are styled from the page's colour tokens)
+    const ln=(a,b,w,c)=>`<line x1="${f1(a[0])}" y1="${f1(a[1])}" x2="${f1(b[0])}" y2="${f1(b[1])}" class="${c}" stroke-width="${w}" stroke-linecap="round"/>`;
+    const R=(x,y,w,h,rx,c)=>`<rect x="${x}" y="${y}" width="${w}" height="${h}" rx="${rx}" class="${c}"/>`;
+    const Ln=(x1,y1,x2,y2,w,c)=>ln([x1,y1],[x2,y2],w,c);
+    const C=(x,y,r,c)=>`<circle cx="${f1(x)}" cy="${f1(y)}" r="${r}" class="${c}"/>`;
+    const DB=p=>C(p[0],p[1],8,"pz-eqd")+C(p[0],p[1],3,"pz-eq");
+    const FLOOR=Ln(4,217,266,217,5,"pz-eq");
+    function seg(a,b,w,cls){ return ln(a,b,w+2.4,"pz-line")+ln(a,b,w,cls); }
+    function half(a,b,w,side,col){
+      const dx=b[0]-a[0], dy=b[1]-a[1], n=Math.hypot(dx,dy)||1, nx=dy/n*side, ny=-dx/n*side, o=w*0.24, k=w*0.15/n;
+      return ln([a[0]+nx*o+dx*k, a[1]+ny*o+dy*k],[b[0]+nx*o-dx*k, b[1]+ny*o-dy*k], f1(w*0.5), col);
+    }
+    function limbLeg(hip, lg){
+      let th=lg.thigh, sh=lg.shin;
+      if (lg.ankle){ [th,sh]=ik(hip, lg.ankle, L.thigh, L.shin, lg.bend??-1); }
+      const kn=P(hip,L.thigh,th), an=P(kn,L.shin,sh), ft=P(an,L.foot,lg.foot??0);
+      return {kn,an,ft};
+    }
+    function limbArm(sh, am){
+      let ua=am.uarm, fa=am.farm; const k=am.k??1;
+      if (am.wrist){ [ua,fa]=ik(sh, am.wrist, L.uarm, L.farm, am.bend??1); }
+      const el=P(sh,L.uarm*k,ua), wr=P(el,L.farm*k,fa);
+      return {el,wr};
+    }
+    // one figure; mus = {name: "pz-pri"|"pz-sec"}
+    function figure(st, mus){
+      const hip=st.hip, sh0=P(hip,L.torso,st.torso), sh=[sh0[0], sh0[1]-(st.shrug||0)];
+      const nk=P(sh,L.neck,st.torso), hd=P(nk,L.head,st.torso);
+      const legs=[st.legs[0], st.legs[1]||st.legs[0]].map(lg=>limbLeg(hip,lg));
+      const arms=[st.arms[0], st.arms[1]||st.arms[0]].map(am=>limbArm(sh,am));
+      const m=k=>mus[k];
+      const out=[];
+      const leg=(j,far)=>{ const s=far?"pz-far":"pz-skin";
+        out.push(seg(hip,j.kn,W.thigh,s), seg(j.kn,j.an,W.shin,s), seg(j.an,j.ft,W.foot,s));
+        if (m("quads")) out.push(half(hip,j.kn,W.thigh,1,m("quads")));
+        if (m("hamstrings")) out.push(half(hip,j.kn,W.thigh,-1,m("hamstrings")));
+        if (m("calves")) out.push(half(j.kn,j.an,W.shin,-1,m("calves")));
+      };
+      const arm=(j,far)=>{ const s=far?"pz-far":"pz-skin";
+        out.push(seg(sh,j.el,W.uarm,s), seg(j.el,j.wr,W.farm,s));
+        if (m("biceps")) out.push(half(sh,j.el,W.uarm,1,m("biceps")));
+        if (m("triceps")) out.push(half(sh,j.el,W.uarm,-1,m("triceps")));
+        if (m("forearms")) out.push(half(j.el,j.wr,W.farm,1,m("forearms")));
+      };
+      leg(legs[1],true); arm(arms[1],true);
+      out.push(seg(hip,sh,W.torso,"pz-skin"), seg(sh,nk,W.neck,"pz-skin"));
+      const along=(f)=>[hip[0]+(sh[0]-hip[0])*f, hip[1]+(sh[1]-hip[1])*f];
+      [["abs",.06,.55,-1],["obliques",.2,.6,-1],["chest",.62,.95,-1],["lower_back",.06,.45,1],["lats",.42,.82,1],["upper_back",.72,.98,1]]
+        .forEach(([k,a,b,side])=>{ if(m(k)) out.push(half(along(a),along(b),W.torso,side,m(k))); });
+      if (m("glutes")){ const dx=sh[0]-hip[0], dy=sh[1]-hip[1], n=Math.hypot(dx,dy); out.push(`<circle cx="${f1(hip[0]+dy/n*7)}" cy="${f1(hip[1]-dx/n*7)}" r="9" class="${m("glutes")}"/>`); }
+      leg(legs[0],false);
+      if (m("traps")) out.push(ln(sh,nk,7,m("traps")));
+      arm(arms[0],false);
+      const delt=["delts_front","delts_side","delts_rear"].map(m).find(Boolean);
+      if (delt) out.push(`<circle cx="${f1(sh[0])}" cy="${f1(sh[1])}" r="7.5" class="${delt}"/>`);
+      out.push(`<circle cx="${f1(hd[0])}" cy="${f1(hd[1])}" r="${L.head}" class="pz-head"/>`);
+      return {svg:out.join(""), j:{hip, sh, kn:legs[0].kn, an:legs[0].an, ft:legs[0].ft, el:arms[0].el, wr:arms[0].wr, wr2:arms[1].wr, an2:legs[1].an}};
+    }
+    // ---- poses
+    const STAND={legs:[{thigh:90,shin:90,foot:0}]};
+    const HANG=[{uarm:90,farm:90}];
+    const seatAt=(x,y,w=62)=>R(x,y,w,10,5,"pz-eqd")+Ln(x+w/2,y+10,x+w/2,214,8,"pz-eq");
+    const back=(x1,y1,x2,y2)=>Ln(x1,y1,x2,y2,11,"pz-eqd");
+    const legPress=(single)=>({
+      eq:FLOOR+R(70,176,70,10,5,"pz-eqd")+Ln(96,186,96,214,8,"pz-eq")+back(78,178,52,100)+Ln(70,186,52,214,6,"pz-eq"),
+      states:[0,1].map(i=>({hip:[98,170], torso:-118, arms:[{uarm:95,farm:-5}],
+        legs: single ? [i?{thigh:-8,shin:-2,foot:-82}:{thigh:-38,shin:42,foot:-75},{thigh:-20,shin:82,foot:0}]
+                     : [i?{thigh:-8,shin:-2,foot:-82}:{thigh:-38,shin:42,foot:-75}],
+        props:j=>{ const fx=Math.max(j.an[0],j.ft[0])+4, fy=(j.an[1]+j.ft[1])/2;
+          return Ln(fx,fy-26,fx,fy+22,7,"pz-eqd")+Ln(fx+3,fy,250,fy,5,"pz-eq")+R(232,fy-30,16,60,3,"pz-eq")+Ln(240,fy+30,240,214,6,"pz-eq"); }}))
+    });
+    const chestMachine=(start,finish)=>({
+      eq:FLOOR+seatAt(84,180)+back(96,180,90,94)+Ln(232,214,232,50,8,"pz-eq")+Ln(178,58,232,58,6,"pz-eq")+C(180,58,5,"pz-eqd"),
+      states:[start,finish].map(a=>({hip:[110,172], torso:-95, legs:[{thigh:-5,shin:95,foot:0}], arms:[a],
+        props:j=>Ln(j.wr[0],j.wr[1],180,58,5,"pz-eq")+Ln(j.wr[0],j.wr[1]-9,j.wr[0],j.wr[1]+9,6,"pz-eqd")}))
+    });
+    const benchFlat=FLOOR+R(66,170,136,10,5,"pz-eqd")+Ln(86,180,86,214,7,"pz-eq")+Ln(182,180,182,214,7,"pz-eq");
+    const pulldown=(start,finish)=>({
+      eq:FLOOR+seatAt(84,180)+Ln(156,214,156,16,8,"pz-eq")+C(156,20,7,"pz-eqd"),
+      states:[start,finish].map(a=>({hip:[110,172], torso:-100, legs:[{thigh:-2,shin:92,foot:0}], arms:[a],
+        props:j=>R(j.kn[0]-16,j.kn[1]-21,30,9,4,"pz-eqd")+Ln(j.wr[0],j.wr[1],156,20,2,"pz-eq")+Ln(j.wr[0]-26,j.wr[1],j.wr[0]+26,j.wr[1],5,"pz-eqd")}))
+    });
+    const row=(start,finish)=>({
+      eq:FLOOR+R(36,190,124,9,4,"pz-eqd")+Ln(98,199,98,214,7,"pz-eq")+Ln(182,152,190,208,8,"pz-eqd")+Ln(238,214,238,96,8,"pz-eq")+C(234,174,6,"pz-eqd"),
+      states:[[-70,start],[-95,finish]].map(([t,a])=>({hip:[80,180], torso:t, legs:[{ankle:[168,186],bend:-1,foot:-70}], arms:[a],
+        props:j=>Ln(j.wr[0],j.wr[1],234,174,2,"pz-eq")+R(j.wr[0]-3,j.wr[1]-8,7,16,3,"pz-eqd")}))
+    });
+    const shoulderSeat=(db)=>({
+      eq:FLOOR+seatAt(84,180)+back(94,180,90,92),
+      states:[{uarm:48,farm:-90},{uarm:-84,farm:-86}].map(a=>({hip:[110,172], torso:-92, legs:[{thigh:-4,shin:94,foot:0}], arms:[a], front:j=> db ? DB(j.wr) : "",
+        props:j=> db ? "" : R(j.wr[0]-4,j.wr[1]-9,8,18,3,"pz-eqd")+Ln(j.wr[0],j.wr[1]+9,j.wr[0]-4,170,4,"pz-eq") }))
+    });
+    const wallSquat=(db)=>({
+      eq:FLOOR+Ln(76,10,76,214,8,"pz-eq"),
+      states:[[128,-95],[166,-90]].map(([y,t])=>({hip:[125,y], torso:t, legs:[{ankle:[160,210],bend:-1,foot:0}],
+        arms: db ? [{uarm:92,farm:90}] : [{uarm:4,farm:0}],
+        props:j=>C(96,j.hip[1]-28,17,"pz-ball"), front:j=>db?DB(j.wr):""}))
+    });
+    const curl=()=>({
+      eq:FLOOR, states:[{uarm:90,farm:90},{uarm:86,farm:-78}].map(a=>({hip:[130,120], torso:-90, ...STAND, arms:[a], front:j=>DB(j.wr)}))
+    });
+    const POSES = {
+      leg_press: legPress(false),
+      leg_press_single: legPress(true),
+      chest_press: chestMachine({uarm:165,farm:-8},{uarm:-6,farm:-4}),
+      flat_db_press: {eq:benchFlat, states:[{uarm:95,farm:-85},{uarm:-90,farm:-90}].map(a=>({hip:[172,160], torso:180, legs:[{ankle:[218,210],bend:-1,foot:0}], arms:[a], front:j=>DB(j.wr)}))},
+      incline_chest_press: {eq:FLOOR+Ln(168,186,100,134,10,"pz-eqd")+Ln(150,190,150,214,7,"pz-eq")+Ln(110,150,96,214,6,"pz-eq"),
+        states:[{uarm:110,farm:-75},{uarm:-55,farm:-55}].map(a=>({hip:[160,172], torso:-145, legs:[{ankle:[214,210],bend:-1,foot:0}], arms:[a], front:j=>DB(j.wr)}))},
+      lat_pulldown: pulldown({uarm:-82,farm:-86},{uarm:100,farm:-75}),
+      lat_pulldown_under: pulldown({uarm:-82,farm:-86},{uarm:100,farm:-75}),
+      seated_row_vbar: row({uarm:5,farm:2},{uarm:125,farm:0}),
+      seated_row_single: row({uarm:5,farm:2},{uarm:125,farm:0}),
+      wall_squat: wallSquat(false),
+      shoulder_press: shoulderSeat(false),
+      shoulder_press_close: shoulderSeat(false),
+      db_overhead_press: shoulderSeat(true),
+      four_point: {eq:FLOOR, states:[
+        {hip:[100,160], torso:-6, legs:[{thigh:90,shin:180,foot:180}], arms:[{uarm:90,farm:90}]},
+        {hip:[100,160], torso:-6, legs:[{thigh:90,shin:180,foot:180},{thigh:182,shin:181,foot:180}], arms:[{uarm:-4,farm:-2},{uarm:90,farm:90}]}]},
+      db_romanian_deadlift: {eq:FLOOR, states:[
+        {hip:[130,120], torso:-90, ...STAND, arms:HANG, front:j=>DB(j.wr)},
+        {hip:[116,128], torso:-22, legs:[{ankle:[130,210],bend:-1,foot:0}], arms:[{uarm:88,farm:90}], front:j=>DB(j.wr)}]},
+      leg_curl: {eq:FLOOR+seatAt(84,178)+back(96,180,82,100)+Ln(226,214,226,120,8,"pz-eq"),
+        states:[{thigh:-4,shin:-2,foot:-80},{thigh:-4,shin:100,foot:10}].map(lg=>({hip:[110,170], torso:-105, legs:[lg], arms:[{uarm:92,farm:20}],
+          props:j=>R(j.kn[0]-26,j.kn[1]-21,28,9,4,"pz-eqd")+Ln(j.kn[0],j.kn[1],j.an[0],j.an[1],4,"pz-eq")+C(j.an[0]-2,j.an[1]+(lg.shin<0?12:0)+(lg.shin<0?0:2),8,"pz-eqd")}))},
+      lying_leg_curl: {eq:FLOOR+R(58,152,152,10,5,"pz-eqd")+Ln(84,162,84,214,7,"pz-eq")+Ln(188,162,188,214,7,"pz-eq"),
+        states:[{thigh:180,shin:180,foot:-90},{thigh:180,shin:-112,foot:-20}].map(lg=>({hip:[104,138], torso:0, legs:[lg], arms:[{uarm:100,farm:30}],
+          props:j=>{ const dx=j.an[0]-j.kn[0], dy=j.an[1]-j.kn[1], n=Math.hypot(dx,dy); return C(j.an[0]+dy/n*11, j.an[1]-dx/n*11, 8,"pz-eqd"); }}))},
+      rear_delt_band: {eq:FLOOR, states:[
+        {hip:[120,120], torso:-90, ...STAND, arms:[{uarm:-2,farm:0}], props:j=>Ln(j.wr[0],j.wr[1]-8,j.wr[0],j.wr[1]+8,5,"pz-band")},
+        {hip:[120,120], torso:-90, ...STAND, arms:[{uarm:0,farm:0,k:0.28}], props:j=>Ln(j.sh[0]+16,j.sh[1]+2,j.sh[0]+16,j.sh[1]+14,5,"pz-band")}]},
+      db_shrug: {eq:FLOOR, states:[0,7].map(s=>({hip:[130,120], torso:-90, shrug:s, ...STAND, arms:HANG, front:j=>DB(j.wr)}))},
+      crunch: {eq:FLOOR, states:[[180,{uarm:4,farm:0}],[-155,{uarm:-16,farm:-10}]].map(([t,a])=>({hip:[150,200], torso:t, legs:[{ankle:[206,211],bend:-1,foot:0}], arms:[a]}))},
+      knee_raise: {eq:FLOOR+R(70,176,120,10,5,"pz-eqd")+Ln(90,186,90,214,7,"pz-eq")+Ln(170,186,170,214,7,"pz-eq"),
+        states:[{thigh:10,shin:25,foot:0},{thigh:-55,shin:65,foot:0}].map(lg=>({hip:[140,166], torso:-125, legs:[lg], arms:[{wrist:[100,176],bend:-1}]}))},
+      woodchop: {eq:FLOOR+Ln(28,214,28,40,8,"pz-eq")+C(32,112,6,"pz-eqd"),
+        states:[{uarm:186,farm:182},{uarm:-2,farm:0}].map(a=>({hip:[140,120], torso:-90, legs:[{thigh:84,shin:96,foot:0},{thigh:98,shin:86,foot:0}], arms:[a],
+          props:j=>Ln(j.wr[0],j.wr[1],32,112,2,"pz-eq")+R(j.wr[0]-3,j.wr[1]-7,7,14,3,"pz-eqd")}))},
+      plank: {hold:true, eq:FLOOR, states:[{hip:[110,192], torso:-8, legs:[{thigh:172,shin:175,foot:100}], arms:[{uarm:90,farm:0}]}]},
+      db_curl: curl(),
+      hammer_curl: curl(),
+      pushdown: {eq:FLOOR+Ln(222,214,222,18,8,"pz-eq")+C(218,26,6,"pz-eqd"),
+        states:[{uarm:96,farm:-35},{uarm:94,farm:88}].map(a=>({hip:[122,120], torso:-86, ...STAND, arms:[a],
+          props:j=>Ln(j.wr[0],j.wr[1],218,26,2,"pz-eq")+Ln(j.wr[0]-8,j.wr[1],j.wr[0]+8,j.wr[1],5,"pz-eqd")}))},
+      db_squat_ball: wallSquat(true),
+      step_up: {eq:FLOOR+R(150,168,84,48,5,"pz-eq"), states:[
+        {hip:[118,124], torso:-88, legs:[{ankle:[172,164],bend:-1,foot:0},{ankle:[110,210],bend:-1,foot:0}], arms:[{uarm:95,farm:92}]},
+        {hip:[174,80], torso:-90, legs:[{ankle:[178,166],bend:-1,foot:0},{ankle:[170,166],bend:-1,foot:0}], arms:[{uarm:95,farm:92}]}]},
+      calf_raise: {eq:FLOOR, states:[
+        {hip:[130,120], torso:-90, legs:[{thigh:90,shin:90,foot:0}], arms:HANG, front:j=>DB(j.wr)},
+        {hip:[130,110], torso:-90, legs:[{thigh:90,shin:90,foot:40}], arms:HANG, front:j=>DB(j.wr)}]},
+      db_row: {eq:FLOOR+R(56,176,166,10,5,"pz-eqd")+Ln(76,186,76,214,7,"pz-eq")+Ln(200,186,200,214,7,"pz-eq"),
+        states:[{uarm:92,farm:90},{uarm:-160,farm:95}].map(a=>({hip:[96,128], torso:4,
+          legs:[{ankle:[86,212],bend:-1,foot:0},{thigh:92,shin:182,foot:180}], arms:[a,{wrist:[172,176],bend:-1}], front:j=>DB(j.wr)}))},
+      hip_thrust: {eq:FLOOR+R(24,156,72,12,5,"pz-eqd")+Ln(44,168,44,214,7,"pz-eq")+Ln(80,168,80,214,7,"pz-eq"),
+        states:[[[138,196],-141],[[148,150],178]].map(([h,t])=>({hip:h, torso:t, legs:[{ankle:[194,210],bend:-1,foot:0}], arms:[{uarm:60,farm:20}],
+          props:j=>C(j.hip[0]+4,j.hip[1]-17,9,"pz-eqd")}))},
+      reverse_lunge: {eq:FLOOR, states:[
+        {hip:[130,120], torso:-90, ...STAND, arms:HANG},
+        {hip:[124,162], torso:-90, legs:[{ankle:[156,210],bend:-1,foot:0},{ankle:[62,208],bend:-1,foot:200}], arms:HANG}]},
+      leg_ext: {eq:FLOOR+seatAt(74,176)+back(86,178,74,100)+Ln(226,214,226,120,8,"pz-eq"),
+        states:[{thigh:-2,shin:92,foot:0},{thigh:-2,shin:-6,foot:-80}].map(lg=>({hip:[100,168], torso:-100, legs:[lg], arms:[{uarm:92,farm:20}],
+          props:j=>{ const dx=j.an[0]-j.kn[0], dy=j.an[1]-j.kn[1], n=Math.hypot(dx,dy); return Ln(j.kn[0],j.kn[1],j.an[0]-dx/n*6,j.an[1]-dy/n*6,4,"pz-eq")+C(j.an[0]-dy/n*(-11)-dx/n*6, j.an[1]+dx/n*(-11)-dy/n*6, 8,"pz-eqd"); }}))},
+    };
+    function panel(spec, st, mus, label, dx){
+      const f=figure(st, mus);
+      const props = st.props ? st.props(f.j) : "";
+      return `<g transform="translate(${dx},0)">${spec.eq}${props}${f.svg}${st.front?st.front(f.j):""}<text x="135" y="246" text-anchor="middle" class="pz-lbl">${label}</text></g>`;
+    }
+    function draw(id, pri, sec){
+      const spec=POSES[id]; if(!spec) return null;
+      const mus={}; (sec||[]).forEach(k=>mus[k]="pz-sec"); (pri||[]).forEach(k=>mus[k]="pz-pri");
+      if (spec.hold) return `<svg viewBox="-150 -40 570 292" role="img" class="pzsvg">${panel(spec,spec.states[0],mus,"HOLD",0)}</svg>`;
+      return `<svg viewBox="0 -40 570 292" role="img" class="pzsvg">${panel(spec,spec.states[0],mus,"START",0)}
+        <path d="M268 112 L292 112" class="pz-arrow" marker-end="url(#pzar)"/>${panel(spec,spec.states[1],mus,"FINISH",300)}
+        <defs><marker id="pzar" markerWidth="8" markerHeight="8" refX="5" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" class="pz-arrowhead"/></marker></defs></svg>`;
+    }
+    return {draw, has:id=>!!POSES[id]};
+  })();
+  // alternatives drawn with the same picture as a matching planned exercise
+  const NAME2POSE = Object.assign(Object.fromEntries(Object.entries(EX).map(([k,v])=>[v[0],k])), {
+    "Seated Leg Press":"leg_press","Seated Leg Press (Quads)":"leg_press_single","Isolated Seated Leg Curls":"leg_curl","Isolated Leg Extensions":"leg_ext",
+    "Flat Bench Dumbbell Press (NG)":"flat_db_press","Lat PullDowns (V Bar)":"lat_pulldown","Seated Cable Rows (Underhand Grip)":"seated_row_vbar",
+    "Standing Alternate Dumbbell Curls":"db_curl","Standing Alternate Hammer Curls":"hammer_curl","Isolated DB Stiff Leg Dead-Lifts":"db_romanian_deadlift",
+    "Standing Front Dumbbell Shrugs":"db_shrug"});
   function shrinkPhoto(file){ return new Promise(res=>{ const r=new FileReader(); r.onload=()=>{ const im=new Image(); im.onload=()=>{
       const k=Math.min(1, 1000/Math.max(im.width,im.height)); const c=document.createElement("canvas"); c.width=Math.round(im.width*k); c.height=Math.round(im.height*k);
       c.getContext("2d").drawImage(im,0,0,c.width,c.height); res(c.toDataURL("image/jpeg",0.8)); }; im.onerror=()=>res(null); im.src=r.result; }; r.onerror=()=>res(null); r.readAsDataURL(file); }); }
-  function visual(key, name, muscles){
+  function visual(key, name, muscles, poseId){
     const box=document.createElement("div"); box.className="visual";
     const ph = photos[key] || photos[name];
     if (ph && ph.url){ const img=document.createElement("img"); img.src=ph.url; img.alt=name; img.loading="lazy"; img.className="exphoto"; box.append(img); }
@@ -1119,7 +1326,15 @@ nav.tabs button[aria-selected="true"]{color:var(--hot);background:var(--soft)}
       let img=box.querySelector("img.exphoto"); if(!img){ img=document.createElement("img"); img.className="exphoto"; img.alt=name; box.prepend(img); }
       img.src=url; pick.firstChild.nodeValue="Change photo"; tap(15); };
     pick.append(inp); box.append(pick);
-    const bm=bodyMap(muscles); if(bm) box.append(bm);
+    const pic = poseId && PZ.has(poseId) && muscles ? PZ.draw(poseId, muscles[0], muscles[1]) : null;
+    if (pic){
+      const w=document.createElement("div"); w.className="pzwrap"; w.innerHTML=pic;
+      const k=document.createElement("div"); k.className="bkey";
+      k.innerHTML='<span><i class="kp"></i></span>'+(muscles[1].length?'<span><i class="ks"></i></span>':'');
+      k.children[0].append("Main: "+muscles[0].map(x=>MLABEL[x]).join(", "));
+      if (muscles[1].length) k.children[1].append("Helpers: "+muscles[1].map(x=>MLABEL[x]).join(", "));
+      w.append(k); box.append(w);
+    } else { const bm=bodyMap(muscles); if(bm) box.append(bm); }
     return box;
   }
 
@@ -1146,7 +1361,7 @@ nav.tabs button[aria-selected="true"]{color:var(--hot);background:var(--soft)}
     txt.append(nm,rx,stars(name)); head.append(no,txt); box.append(head);
     if (!editable) return box;
     const body=document.createElement("div"); body.className="exbody";
-    body.append(visual(key, name, altOn ? (MUS_ALT[name] || MUS[id]) : MUS[id]));
+    body.append(visual(key, name, altOn ? (MUS_ALT[name] || MUS[NAME2POSE[name]] || MUS[id]) : MUS[id], altOn ? NAME2POSE[name] : id));
     if (!bw && range) body.append(kgChips(range, wt));
     const tip=document.createElement("div"); tip.className="tip";
     tip.innerHTML="<strong>Tip</strong> · <span></span>"; tip.children[1].textContent= altOn ? "Replaces "+info[0]+" today. Same sets and reps." : info[2];
