@@ -681,10 +681,10 @@ nav.tabs button[aria-selected="true"]{color:var(--hot);background:var(--soft)}
       if (dow in map) label = "Full Body " + order[map[dow]];
       else if (dow===0 || dow===3) label = "Cardio & Core";
     } else {
-      const map = {0:"Upper Body 1",1:"Lower Body 1",3:"Upper Body 2",4:"Lower Body 2"};
+      const map = {6:"Cardio & Core",0:"Upper Body 1",1:"Lower Body 1",3:"Upper Body 2",4:"Lower Body 2"};
       if (dow in map) label = map[dow];
     }
-    const foodMap = week<=4 ? ["A","A","B","A","A","D","A"] : ["A","A","B","A","A","D","B"];
+    const foodMap = ["A","A","B","A","A","D","A"];
     const food = foodMap[dow];
     const phase = week<=4 ? "Phase 1 · Foundation" : week<=8 ? "Phase 2 · Build" : "Phase 3 · Burn";
     const extra = week===8 ? " · deload week" : week===12 ? " · test & reset week" : "";
@@ -951,6 +951,11 @@ nav.tabs button[aria-selected="true"]{color:var(--hot);background:var(--soft)}
         groups:pairs(w.ex,[s+" sets",s+" sets"]), finisher:"Incline treadmill "+(week<=2?15:20)+" min (6–8%, 5 km/h) + upright bike 10 min, easy"};
       return {key, title:w.t, length:"40–45 min", effort:RPE1[week], groups:pairs(w.ex,[s+" sets",s+" sets",s+" sets"]),
         finisher:w.fin+" · "+(week<=2?8:10)+" min"};
+    }
+    if (dow===6){ // Saturday: Cardio & Core in weeks 5-12
+      const s = (week===8||week===12) ? 2 : 3, w=W.FC;
+      return {key:"FC", title:w.t, length:"40–45 min", effort:"RPE 5–6 — a recovery day, you can talk the whole time"+(week===8?" · deload week, keep it easy":""),
+        groups:pairs(w.ex,[s+" sets",s+" sets"]), finisher:"Incline treadmill "+(week===8?15:20)+" min (6–8%, 5 km/h) + upright bike 10 min, easy"};
     }
     const key = {0:"U1",1:"L1",3:"U2",4:"L2"}[dow];
     if (!key) return null;
@@ -1756,7 +1761,7 @@ nav.tabs button[aria-selected="true"]{color:var(--hot);background:var(--soft)}
     const ws=addDays(iso(START),(w-1)*7);
     $("pwTitle").textContent="Week "+w+" · "+shortDate(ws)+" – "+shortDate(addDays(ws,6));
     $("pwPhase").textContent="Phase "+k+" · "+PH[k][0]; $("pwPhase").style.background=PH[k][1];
-    const planned = w<=4?5:4;
+    const planned = 5;
     const sets = w<=4 ? (w<=2?"2 sets":"3 sets") : w===8 ? "2 sets, lighter" : w===12 ? "2 sets, test week" : w>=9 ? "4 × 8 main lifts, 3 sets others" : "3 sets of 8–12";
     $("pwSub").textContent = planned+" gym days · "+sets+" · steps "+fmt(STEPS[w-1])+" a day";
     const rv=$("pwReview");
@@ -1827,7 +1832,7 @@ nav.tabs button[aria-selected="true"]{color:var(--hot);background:var(--soft)}
   function weekStats(){
     const p = planFor(today); if (!p.week || p.week>12) return;
     const ws = new Date(START); ws.setDate(ws.getDate()+(p.week-1)*7);
-    const planned = p.week<=4 ? 5 : 4; let sess=0, st=[], wt=[], pw=[], kc=[], pr=[];
+    const planned = 5; let sess=0, st=[], wt=[], pw=[], kc=[], pr=[];
     for (let i=0;i<7;i++){ const d=new Date(ws); d.setDate(d.getDate()+i); const s=iso(d); const r=rows[s];
       const t=totals(s); if(t.n){ kc.push({k:t.kcal,t:KCAL[dayType(s)]}); pr.push(t.prot); }
       if(!r) continue;
